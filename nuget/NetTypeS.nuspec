@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Ormikon.NetTypeS</id>
+    <version>0.1.0</version>
+    <title>NetTypeS</title>
+    <authors>Ormikon</authors>
+    <owners>Ormikon</owners>
+    <licenseUrl>https://github.com/Ormikon/NetTypeS/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Ormikon/NetTypeS</projectUrl>
+    <iconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      The package with classes for generating TypeScript declarations and code.
+    </description>
+    <summary>
+      NetTypeS package.
+    </summary>
+    <releaseNotes>Initial package.</releaseNotes>
+    <copyright>Copyright Ormikon 2014</copyright>
+    <tags>typescript,ts,javascript,generator</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\src\NetTypes\NetTypes\bin\Release\NetTypeS.dll" target="lib\net45" />
+    <file src="..\src\NetTypes\NetTypes\bin\Release\NetTypeS.pdb" target="lib\net45" />
+    <file src="..\src\NetTypes\NetTypes\bin\Release\NetTypeS.XML" target="lib\net45" />
+  </files>
+</package>
