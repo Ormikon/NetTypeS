@@ -10,6 +10,7 @@ using NetTypeS.Example.Classes;
 using NetTypeS.Example.Enums;
 using NetTypeS.Example.Generics;
 using NetTypeS.Example.Interfaces;
+using NetTypeS.Utils;
 
 namespace NetTypeS.Example
 {
@@ -108,8 +109,7 @@ namespace NetTypeS.Example
 						.ForEnums(et =>
 							Element.New()
 								.AddText("var ")
-								.AddText(et.Name.Remove(1).ToLowerInvariant())
-								.AddText(et.Name.Substring(1))
+								.AddText(StringUtils.ToCamelCase(et.Name))
 								.AddText("Names = ")
 								.AddBlock(et.Values.Select((ev, i) =>
 									Element.New()
