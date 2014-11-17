@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Ormikon.NetTypeS</id>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <title>NetTypeS</title>
     <authors>Ormikon</authors>
     <owners>Ormikon</owners>
@@ -16,7 +16,7 @@
     <summary>
       NetTypeS package.
     </summary>
-    <releaseNotes>Initial package.</releaseNotes>
+    <releaseNotes>Interface property camel case formatting was changed.</releaseNotes>
     <copyright>Copyright Ormikon 2014</copyright>
     <tags>typescript,ts,javascript,generator</tags>
     <dependencies>
