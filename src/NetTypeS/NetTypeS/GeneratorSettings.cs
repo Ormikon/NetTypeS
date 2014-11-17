@@ -1,6 +1,7 @@
 ﻿using System;
 using NetTypeS.Delegates;
 using NetTypeS.Interfaces;
+using NetTypeS.Utils;
 
 namespace NetTypeS
 {
@@ -24,7 +25,7 @@ namespace NetTypeS
 				name => name;
 
 			public static CustomNameFormatter PropertyNameFormatter =
-				name => name.Remove(1).ToLowerInvariant() + name.Substring(1);
+				name => StringUtils.ToCamelCase(name);
 
 			public static CustomPropertyFilter PropertyFilter =
 				prop => !typeof (Delegate).IsAssignableFrom(prop.Type); //Exclude properties with delegates
