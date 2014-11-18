@@ -10,9 +10,6 @@ namespace NetTypeS.Utils
 {
 	public static class TypeUtils
 	{
-		private static readonly string enumerableTypeName = typeof (IEnumerable).Name;
-		private static readonly string genericEnumerableTypeName = typeof (IEnumerable<>).Name;
-
 		public static readonly IDictionary<Type, Type> KnownTypes = new Dictionary<Type, Type>
 		                                                            {
 			                                                            {typeof (DateTime), typeof (string)},
@@ -82,13 +79,13 @@ namespace NetTypeS.Utils
 				? type
 				: type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IEnumerable<>)
 					? type
-					: type.GetInterface(genericEnumerableTypeName);
+					: type.GetInterfaces().FirstOrDefault(i => i == typeof(IEnumerable<>));
 			if (enumType != null && enumType.GenericTypeArguments != null
 			    && enumType.GenericTypeArguments.Length > 0)
 			{
 				return enumType.GenericTypeArguments.First();
 			}
-			enumType = type == typeof (IEnumerable) ? type : type.GetInterface(enumerableTypeName);
+			enumType = type == typeof (IEnumerable) ? type : type.GetInterfaces().FirstOrDefault(i => i == typeof (IEnumerable));
 			return enumType == null ? null : typeof (object);
 		}
 

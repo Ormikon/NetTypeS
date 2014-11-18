@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Ormikon.NetTypeS</id>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
     <title>NetTypeS</title>
     <authors>Ormikon</authors>
     <owners>Ormikon</owners>
@@ -16,7 +16,7 @@
     <summary>
       NetTypeS package.
     </summary>
-    <releaseNotes>Better Interface types handling. Include inherited types option.</releaseNotes>
+    <releaseNotes>GetCollectionType ambiguity exception fix.</releaseNotes>
     <copyright>Copyright Ormikon 2014</copyright>
     <tags>typescript,ts,javascript,generator</tags>
     <dependencies>
