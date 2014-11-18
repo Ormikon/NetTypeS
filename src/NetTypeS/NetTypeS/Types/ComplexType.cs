@@ -18,6 +18,8 @@ namespace NetTypeS.Types
 		private readonly bool isGenerated;
 		private readonly IReadOnlyList<ITypeProperty> properties;
 		private readonly Lazy<Attribute[]> customAttributes;
+		private readonly Type[] interfaces;
+		private readonly bool isInterface;
 
 		public ComplexType(Type type)
 		{
@@ -40,6 +42,8 @@ namespace NetTypeS.Types
 
 			isGenerated = type.IsDefined(typeof (CompilerGeneratedAttribute), false);
 
+			interfaces = type.GetInterfaces();
+			isInterface = type.IsInterface;
 			properties = type.GetPublicMembers().Select(mi => new ComplexTypeProperty(mi)).ToArray();
 			customAttributes = new Lazy<Attribute[]>(() => type.GetCustomAttributes<Attribute>().ToArray());
 		}
@@ -101,6 +105,11 @@ namespace NetTypeS.Types
 			get { return type.IsGenericTypeDefinition; }
 		}
 
+		public bool IsInterface
+		{
+			get { return isInterface; }
+		}
+
 		public Type GenericType
 		{
 			get { return type.GetGenericTypeDefinition(); }
@@ -109,6 +118,11 @@ namespace NetTypeS.Types
 		public Type[] GenericArguments
 		{
 			get { return type.GetGenericArguments(); }
+		}
+
+		public Type[] Interfaces
+		{
+			get { return interfaces; }
 		}
 
 		public IReadOnlyList<ITypeProperty> Properties

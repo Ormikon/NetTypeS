@@ -18,7 +18,7 @@ namespace NetTypeS.Elements
 		private readonly bool declaration;
 
 		public TypeScriptInterface(IComplexType type, bool declaration = false, bool export = false)
-			: this(new TypeNameElement(type.Type), type.Properties, declaration, export)
+			: this(new TypeNameElement(type.Type), GetExtensionsIfInterface(type), type.Properties, declaration, export)
 		{
 		}
 
@@ -73,6 +73,13 @@ namespace NetTypeS.Elements
 			this.declaration = declaration;
 		}
 
+		private static IEnumerable<TypeLinkElement> GetExtensionsIfInterface(IComplexType complexType)
+		{
+			if (!complexType.IsInterface || complexType.Interfaces.Length == 0)
+				return null;
+			return complexType.Interfaces.Select(i => new TypeLinkElement(i));
+		}
+
 		private static IEnumerable<ITypeScriptElement> AppendSemicolon(IEnumerable<ITypeScriptElement> members)
 		{
 			return members == null ? null : members.Select(m => new FixedElement(m, new TextElement(";")));
@@ -90,7 +97,7 @@ namespace NetTypeS.Elements
 			b.Append(" ");
 			if (extends != null && extends.Count > 0)
 			{
-				b.Append(" extends ");
+				b.Append("extends ");
 				int extIdx = 0;
 				foreach (var extEl in extends)
 				{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Security.AccessControl;
@@ -10,6 +11,7 @@ using NetTypeS.Example.Classes;
 using NetTypeS.Example.Enums;
 using NetTypeS.Example.Generics;
 using NetTypeS.Example.Interfaces;
+using NetTypeS.Interfaces;
 using NetTypeS.Utils;
 
 namespace NetTypeS.Example
@@ -138,6 +140,15 @@ namespace NetTypeS.Example
 			Console.WriteLine(Generator
 				.New()
 				.Module("Generics", b => b.Include<ComplexGeneric<string, DateTime>>())
+				.Generate());
+
+			Console.WriteLine(new string('=', 30));
+
+			Console.WriteLine(Generator
+				.New(new GeneratorSettings{IncludeInheritedTypes = true})
+				.Module("Api", b => b.Include<ComplexExample>().Include<Classes.Example>())
+				.Export("Api.Enums", sb =>
+					sb.Include<FirstEnum>().Include<SecondEnum>())
 				.Generate());
 
 			Console.ReadKey();

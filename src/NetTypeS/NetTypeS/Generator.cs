@@ -6,10 +6,14 @@ using NetTypeS.Utils;
 
 namespace NetTypeS
 {
+	/// <summary>
+	/// TypeScript generator
+	/// </summary>
 	public sealed class Generator : IGenerator
 	{
 		private readonly IGeneratorSettings settings;
-		private readonly ITypeCollector collector = new TypeCollector();
+		private readonly IInheritedTypeSpy inheritedTypeSpy;
+		private readonly ITypeCollector collector;
 		private readonly ICollection<string> references = new List<string>();
 		private readonly IList<string> modulesOrder = new List<string>();
 
@@ -21,8 +25,15 @@ namespace NetTypeS
 		private Generator(GeneratorSettings settings)
 		{
 			this.settings = settings.Clone();
+			inheritedTypeSpy = new InheritedTypeSpy(settings.InheritedTypeAssemblies.ToArray());
+			collector = new TypeCollector(inheritedTypeSpy, settings.IncludeInheritedTypes);
 		}
 
+		/// <summary>
+		/// Creates a new instance of TypeScript generator
+		/// </summary>
+		/// <param name="settings">Generator settings</param>
+		/// <returns>TypeScript generator.</returns>
 		public static IGenerator New(GeneratorSettings settings = null)
 		{
 			return new Generator(settings ?? new GeneratorSettings());
@@ -180,6 +191,11 @@ namespace NetTypeS
 		public ITypeCollector TypeCollector
 		{
 			get { return collector; }
+		}
+
+		public IInheritedTypeSpy InheritedTypeSpy
+		{
+			get { return inheritedTypeSpy; }
 		}
 
 		public IGeneratorSettings Settings

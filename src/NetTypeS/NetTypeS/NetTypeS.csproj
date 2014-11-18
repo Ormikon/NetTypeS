@@ -72,8 +72,10 @@
     <Compile Include="GeneratorModuleContext.cs" />
     <Compile Include="GeneratorModule.cs" />
     <Compile Include="GeneratorSettings.cs" />
+    <Compile Include="InheritedTypeSpy.cs" />
     <Compile Include="Interfaces\IDynamicElement.cs" />
     <Compile Include="Interfaces\IElementFilter.cs" />
+    <Compile Include="Interfaces\IInheritedTypeSpy.cs" />
     <Compile Include="Interfaces\ITypeElementBuilder.cs" />
     <Compile Include="Interfaces\IElementNameFormatter.cs" />
     <Compile Include="Interfaces\IElementNameResolver.cs" />

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Reflection;
 using NetTypeS.Delegates;
 using NetTypeS.Interfaces;
 using NetTypeS.Utils;
@@ -7,6 +10,8 @@ namespace NetTypeS
 {
 	public class GeneratorSettings : ICloneable, IGeneratorSettings
 	{
+		private readonly Collection<Assembly> inheritedTypeAssemblies;
+
 		public static class Default
 		{
 			public static CustomTypeNameResolver TypeNameResolver =
@@ -34,6 +39,7 @@ namespace NetTypeS
 		public GeneratorSettings()
 		{
 			Format = new GeneratorFormatSettings();
+			inheritedTypeAssemblies = new Collection<Assembly>();
 		}
 
 		public GeneratorFormatSettings Format { get; private set; }
@@ -67,9 +73,29 @@ namespace NetTypeS
 
 		#endregion
 
+		#region Inherited types
+
+		public Collection<Assembly> InheritedTypeAssemblies
+		{
+			get { return inheritedTypeAssemblies; }
+		}
+
+		IReadOnlyCollection<Assembly> IGeneratorSettings.InheritedTypeAssemblies
+		{
+			get { return inheritedTypeAssemblies; }
+		}
+
+		public bool IncludeInheritedTypes { get; set; }
+
+		#endregion
+
+		/// <summary>
+		/// Clone settings
+		/// </summary>
+		/// <returns>Cloned settings</returns>
 		public GeneratorSettings Clone()
 		{
-			return new GeneratorSettings
+			var result = new GeneratorSettings
 			       {
 				       Format = Format.Clone(),
 				       TypeNameResolver = TypeNameResolver ?? Default.TypeNameResolver,
@@ -79,8 +105,15 @@ namespace NetTypeS
 				       EnumNameFormatter = EnumNameFormatter ?? Default.EnumNameFormatter,
 				       PropertyNameFormatter = PropertyNameFormatter ?? Default.PropertyNameFormatter,
 				       PropertyFilter = PropertyFilter ?? Default.PropertyFilter,
-				       AllPropertiesAreOptional = AllPropertiesAreOptional
+				       AllPropertiesAreOptional = AllPropertiesAreOptional,
+					   IncludeInheritedTypes = IncludeInheritedTypes
 			       };
+			foreach (var assembly in InheritedTypeAssemblies)
+			{
+				result.InheritedTypeAssemblies.Add(assembly);
+			}
+
+			return result;
 		}
 
 		object ICloneable.Clone()

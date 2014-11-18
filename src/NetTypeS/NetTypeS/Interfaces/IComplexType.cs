@@ -13,8 +13,10 @@ namespace NetTypeS.Interfaces
 		bool IsGenerated { get; }
 		bool IsGeneric { get; }
 		bool IsGenericDefinition { get; }
+		bool IsInterface { get; }
 		Type GenericType { get; }
 		Type[] GenericArguments { get; }
+		Type[] Interfaces { get; }
 		IReadOnlyList<ITypeProperty> Properties { get; }
 	}
 }

@@ -6,6 +6,7 @@ namespace NetTypeS.Interfaces
 	public interface ITypeCollector
 	{
 		void Collect(Type type, string moduleBinding, bool overrideBindingIfExists = true);
+		void Collect(Type type, bool includeInherited, string moduleBinding, bool overrideBindingIfExists = true);
 		void Replace(Type type, Type withType);
 		void Replace(Func<Type, bool> test, Type withType);
 		ITypeScriptType Get(Type type);

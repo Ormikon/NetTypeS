@@ -34,6 +34,11 @@ namespace NetTypeS.Interfaces
 		ITypeCollector TypeCollector { get; }
 
 		/// <summary>
+		/// Inherited type lookup interface.
+		/// </summary>
+		IInheritedTypeSpy InheritedTypeSpy { get; }
+
+		/// <summary>
 		/// Generator settings.
 		/// </summary>
 		IGeneratorSettings Settings { get; }

@@ -27,11 +27,15 @@ namespace NetTypeS
 			public string ModuleBinding { get; set; }
 		}
 
+		private readonly IInheritedTypeSpy inheritedTypeSpy;
+		private readonly bool includeInheritedTypes;
 		private readonly ISet<TypeMutator> mutators = new HashSet<TypeMutator>();
 		private readonly IDictionary<Type, CollectedTypeInfo> collected = new Dictionary<Type, CollectedTypeInfo>();
 
-		public TypeCollector()
+		public TypeCollector(IInheritedTypeSpy inheritedTypeSpy = null, bool includeInherited = false)
 		{
+			this.inheritedTypeSpy = inheritedTypeSpy;
+			includeInheritedTypes = includeInherited;
 			RegisterSimpleTypes();
 			// Add replacement for basic types
 			foreach (var kv in TypeUtils.KnownTypes)
@@ -61,6 +65,11 @@ namespace NetTypeS
 		}
 
 		public void Collect(Type type, string moduleBinding, bool overrideBindingIfExists = true)
+		{
+			Collect(type, includeInheritedTypes, moduleBinding, overrideBindingIfExists);
+		}
+
+		public void Collect(Type type, bool includeInherited, string moduleBinding, bool overrideBindingIfExists = true)
 		{
 			// TODO: Recursion to cycle?
 			if (type == null)
@@ -97,7 +106,7 @@ namespace NetTypeS
 				var nut = Nullable.GetUnderlyingType(type);
 				collected.Add(type, new CollectedTypeInfo(new NullableType(nut)));
 				// The same method parameters if nullable
-				Collect(nut, moduleBinding, overrideBindingIfExists);
+				Collect(nut, includeInherited, moduleBinding, overrideBindingIfExists);
 				return;
 			}
 
@@ -109,43 +118,58 @@ namespace NetTypeS
 			{
 				var ct = new CollectionType(type);
 				collected.Add(type, new CollectedTypeInfo(ct));
-				Collect(ct.Type, moduleBinding, false);
+				Collect(ct.Type, includeInherited, moduleBinding, false);
 			}
 			else
 			{
-				CollectComplex(type, moduleBinding, overrideBindingIfExists);
+				CollectComplex(type, includeInherited, moduleBinding, overrideBindingIfExists);
 			}
 		}
 
-		private void CollectComplex(Type type, string moduleBinding, bool overrideBindingIfExists)
+		private void CollectNonGenericComplex(IComplexType type, bool includeInherited, string moduleBinding,
+			bool overrideBindingIfExists)
+		{
+			collected.Add(type.Type, new CollectedTypeInfo(type, moduleBinding));
+			if (type.IsInterface)
+				foreach (var @interface in type.Interfaces)
+				{
+					// Do not include inherited for implemented interfaces
+					Collect(@interface, false, moduleBinding, overrideBindingIfExists);
+				}
+			foreach (var p in type.Properties)
+			{
+				Collect(p.Type, includeInherited, moduleBinding, false);
+			}
+		}
+
+		private void CollectComplex(Type type, bool includeInherited, string moduleBinding, bool overrideBindingIfExists)
 		{
 			if (type.IsGenericType)
 			{
 				// We do not collecting information for constructed types because of
 				// possible circle references
 				if (type.IsConstructedGenericType)
-					Collect(type.GetGenericTypeDefinition(), moduleBinding, overrideBindingIfExists);
+					Collect(type.GetGenericTypeDefinition(), includeInherited, moduleBinding, overrideBindingIfExists);
 				else
 				{
 					var ct = new ComplexType(type);
-					collected.Add(type, new CollectedTypeInfo(ct, moduleBinding));
+					CollectNonGenericComplex(ct, includeInherited, moduleBinding, overrideBindingIfExists);
 					foreach (var genericArgument in ct.GenericArguments)
 					{
-						Collect(genericArgument, moduleBinding, overrideBindingIfExists);
-					}
-					foreach (var p in ct.Properties)
-					{
-						Collect(p.Type, moduleBinding, false);
+						Collect(genericArgument, includeInherited, moduleBinding, overrideBindingIfExists);
 					}
 				}
 			}
 			else
 			{
 				var ct = new ComplexType(type);
-				collected.Add(type, new CollectedTypeInfo(ct, moduleBinding));
-				foreach (var p in ct.Properties)
+				CollectNonGenericComplex(ct, includeInherited, moduleBinding, overrideBindingIfExists);
+			}
+			if (includeInherited && inheritedTypeSpy != null)
+			{
+				foreach (var inheritedType in inheritedTypeSpy.GetInheritedTypes(type))
 				{
-					Collect(p.Type, moduleBinding, false);
+					Collect(inheritedType, true, moduleBinding, overrideBindingIfExists);
 				}
 			}
 		}
