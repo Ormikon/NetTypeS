@@ -73,20 +73,42 @@ namespace NetTypeS.Utils
 			return false;
 		}
 
+		private static Type GetTypeInterface(Type definition, Type type)
+		{
+			if (!definition.IsInterface)
+				throw new ArgumentException("Method supports only interface types as definitions");
+
+			if (definition.IsGenericType)
+			{
+				if (definition == type)
+					return type;
+				if (type.IsGenericType && type.IsConstructedGenericType)
+				{
+					var typeDefinition = type.GetGenericTypeDefinition();
+					if (typeDefinition == definition)
+						return type;
+				}
+				var foundInterface =
+					type.GetInterfaces()
+						.FirstOrDefault(i => i == definition || (i.IsConstructedGenericType && i.GetGenericTypeDefinition() == definition));
+				return foundInterface;
+			}
+
+			return type == definition ? type : type.GetInterfaces().FirstOrDefault(i => i == definition);
+		}
+
 		public static Type GetCollectionType(this Type type)
 		{
-			var enumType = type == typeof (IEnumerable<>)
-				? type
-				: type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IEnumerable<>)
-					? type
-					: type.GetInterfaces().FirstOrDefault(i => i == typeof(IEnumerable<>));
-			if (enumType != null && enumType.GenericTypeArguments != null
-			    && enumType.GenericTypeArguments.Length > 0)
+			var interfaceType = GetTypeInterface(typeof (IEnumerable<>), type);
+			if (interfaceType != null)
 			{
-				return enumType.GenericTypeArguments.First();
+				if (interfaceType == typeof (IEnumerable<>) || interfaceType.GenericTypeArguments.Length == 0)
+					return interfaceType.GetGenericArguments().First();
+				return interfaceType.GenericTypeArguments.First();
 			}
-			enumType = type == typeof (IEnumerable) ? type : type.GetInterfaces().FirstOrDefault(i => i == typeof (IEnumerable));
-			return enumType == null ? null : typeof (object);
+
+			interfaceType = GetTypeInterface(typeof (IEnumerable), type);
+			return interfaceType == null ? null : typeof (object);
 		}
 
 		public static IEnumValue[] GetEnumTypeValues(this Type type)
