@@ -229,5 +229,32 @@ namespace NetTypeS
 		{
 			return generatorModule.Include(typeof (T), name);
 		}
+
+		/// <summary>
+		/// Includes a new type into the module.
+		/// </summary>
+		/// <param name="generatorModule">Generator module.</param>
+		/// <param name="type">Type</param>
+		/// <param name="typeName">New name.</param>
+		/// <returns>Current module builder.</returns>
+		public static IGeneratorModule IncludeWithInherited(this IGeneratorModule generatorModule, Type type, string typeName = null)
+		{
+			generatorModule.Generator.TypeCollector.Collect(type, true, generatorModule.FullName);
+			if (!string.IsNullOrEmpty(typeName))
+				generatorModule.Generator.NameFor(type, typeName);
+			return generatorModule;
+		}
+
+		/// <summary>
+		/// Includes a new type into the module.
+		/// </summary>
+		/// <typeparam name="T">Type</typeparam>
+		/// <param name="generatorModule">Generator module.</param>
+		/// <param name="name">New name.</param>
+		/// <returns>Current module builder.</returns>
+		public static IGeneratorModule IncludeWithInherited<T>(this IGeneratorModule generatorModule, string name = null)
+		{
+			return generatorModule.Include(typeof(T), name);
+		}
 	}
 }
