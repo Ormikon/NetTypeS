@@ -164,8 +164,6 @@ namespace NetTypeS
 		{
 			if (type.IsGenericType)
 			{
-				// We do not collecting information for constructed types because of
-				// possible circle references
                 if (type.IsConstructedGenericType)
                 {
                     foreach(var genericArg in type.GenericTypeArguments)
