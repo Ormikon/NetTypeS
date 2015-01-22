@@ -47,6 +47,7 @@
     <Compile Include="Classes\InheritedFromComplexExample.cs" />
     <Compile Include="Enums\FirstEnum.cs" />
     <Compile Include="Enums\SecondEnum.cs" />
+    <Compile Include="Generics\ClassWithGenericProp.cs" />
     <Compile Include="Generics\ComplexGeneric.cs" />
     <Compile Include="Generics\Generic.cs" />
     <Compile Include="Interfaces\IComplexExample.cs" />

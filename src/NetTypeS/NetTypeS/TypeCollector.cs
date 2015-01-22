@@ -166,9 +166,16 @@ namespace NetTypeS
 			{
 				// We do not collecting information for constructed types because of
 				// possible circle references
-				if (type.IsConstructedGenericType)
-					Collect(type.GetGenericTypeDefinition(), includeInherited, moduleBinding, overrideBindingIfExists);
-				else
+                if (type.IsConstructedGenericType)
+                {
+                    foreach(var genericArg in type.GenericTypeArguments)
+                    {
+                        Collect(genericArg, includeInherited, moduleBinding, overrideBindingIfExists);
+                    }
+
+                    Collect(type.GetGenericTypeDefinition(), includeInherited, moduleBinding, overrideBindingIfExists);
+                }
+                else
 				{
 					var ct = new ComplexType(type);
 					CollectNonGenericComplex(ct, includeInherited, moduleBinding, overrideBindingIfExists);
