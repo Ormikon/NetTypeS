@@ -29,13 +29,17 @@ namespace NetTypeS
 
 		private readonly IInheritedTypeSpy inheritedTypeSpy;
 		private readonly bool includeInheritedTypes;
+        private readonly bool generateNumberTypeForDictionaryKeys;
 		private readonly ISet<TypeMutator> mutators = new HashSet<TypeMutator>();
 		private readonly IDictionary<Type, CollectedTypeInfo> collected = new Dictionary<Type, CollectedTypeInfo>();
 
-		public TypeCollector(IInheritedTypeSpy inheritedTypeSpy = null, bool includeInherited = false)
+		public TypeCollector(IInheritedTypeSpy inheritedTypeSpy = null, 
+            bool includeInherited = false,
+            bool generateNumberTypeForDictionaryKeys = false)
 		{
 			this.inheritedTypeSpy = inheritedTypeSpy;
 			includeInheritedTypes = includeInherited;
+            this.generateNumberTypeForDictionaryKeys = generateNumberTypeForDictionaryKeys;
 			RegisterSimpleTypes();
 			// Add replacement for basic types
 			foreach (var kv in TypeUtils.KnownTypes)
@@ -114,11 +118,25 @@ namespace NetTypeS
 				collected.Add(type, new CollectedTypeInfo(new EnumType(type), moduleBinding));
 			else if (type.IsSimple())
 				collected.Add(type, new CollectedTypeInfo(SimpleType.Create(type)));
-			else if (type.IsCollection())
+            else if (type.IsCollection())
 			{
-				var ct = new CollectionType(type);
-				collected.Add(type, new CollectedTypeInfo(ct));
-				Collect(ct.Type, includeInherited, moduleBinding, false);
+                if (type.IsDictionary())
+                {
+                    var dictTypeParams = type.GetDictionaryTypes();
+                    var keyType = dictTypeParams[0];
+                    Type tsKeyType = (keyType.IsNumber() && generateNumberTypeForDictionaryKeys) 
+                        ? typeof(int) 
+                        : typeof(string);
+                    var dt = new DictionaryType(tsKeyType, dictTypeParams[1]);
+                    collected.Add(type, new CollectedTypeInfo(dt));
+                    Collect(dt.ValueType, includeInherited, moduleBinding, false);
+                }
+                else
+                {
+                    var ct = new CollectionType(type);
+                    collected.Add(type, new CollectedTypeInfo(ct));
+                    Collect(ct.Type, includeInherited, moduleBinding, false);
+                }
 			}
 			else
 			{

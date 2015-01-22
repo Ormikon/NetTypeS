@@ -25,6 +25,11 @@
 		/// </summary>
 		Collection,
 
+        /// <summary>
+        /// TypeScript dictionary
+        /// </summary>
+        Dictionary,
+
 		/// <summary>
 		/// Nullable type. Especially for type collector
 		/// </summary>

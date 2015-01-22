@@ -90,7 +90,14 @@ namespace NetTypeS
 				return GetTypeNameElement(((NullableType) tst).UnderlyingType);
 			if (tst.Code == TypeScriptTypeCode.Collection)
 				return new FixedElement(GetTypeNameElement(((CollectionType) tst).Type), new TextElement("[]"));
-			if (tst.Code == TypeScriptTypeCode.Enum)
+            if (tst.Code == TypeScriptTypeCode.Dictionary)
+                return new FixedElement(
+                    new TextElement("{ [ key: "),
+                    GetTypeNameElement(((DictionaryType)tst).KeyType),
+                    new TextElement(" ] : "),
+                    GetTypeNameElement(((DictionaryType)tst).ValueType),
+                    new TextElement(" }"));
+            if (tst.Code == TypeScriptTypeCode.Enum)
 			{
 				string customName = customNameHolder.GetNameFor(type);
 				return new EnumNameElement(customName ?? settings.TypeNameResolver(tst));
@@ -141,6 +148,11 @@ namespace NetTypeS
 			if (tst.Code == TypeScriptTypeCode.Collection)
 			{
 				return GetTypeModuleElement(((ICollectionType) tst).Type);
+			}
+            if (tst.Code == TypeScriptTypeCode.Dictionary)
+			{
+                // TODO: use key, value or do something more complex?
+				return GetTypeModuleElement(((IDictionaryType) tst).KeyType);
 			}
 			if (tst.Code == TypeScriptTypeCode.Complex)
 			{

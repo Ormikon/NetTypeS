@@ -73,6 +73,7 @@
     <Compile Include="GeneratorModule.cs" />
     <Compile Include="GeneratorSettings.cs" />
     <Compile Include="InheritedTypeSpy.cs" />
+    <Compile Include="Interfaces\IDictionaryType.cs" />
     <Compile Include="Interfaces\IDynamicElement.cs" />
     <Compile Include="Interfaces\IElementFilter.cs" />
     <Compile Include="Interfaces\IInheritedTypeSpy.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Interfaces\ITypeCollector.cs" />
     <Compile Include="TypeElementBuilder.cs" />
     <Compile Include="TypeInfo.cs" />
+    <Compile Include="Types\DictionaryType.cs" />
     <Compile Include="Types\EnumTypeValue.cs" />
     <Compile Include="Interfaces\INullableType.cs" />
     <Compile Include="Interfaces\ICollectionType.cs" />

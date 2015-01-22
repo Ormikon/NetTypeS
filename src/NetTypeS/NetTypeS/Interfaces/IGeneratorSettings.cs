@@ -63,5 +63,11 @@ namespace NetTypeS.Interfaces
 		/// Gets if including of inherited types is enabled
 		/// </summary>
 		bool IncludeInheritedTypes { get; }
-	}
+
+        /// <summary>
+        /// Gets if number-like types in dictionaries keys should be threated as TS number type, instead of string
+        /// </summary>
+        bool GenerateNumberTypeForDictionaryKeys { get; }
+   
+    }
 }

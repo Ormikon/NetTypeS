@@ -145,7 +145,7 @@ namespace NetTypeS.Example
 			Console.WriteLine(new string('=', 30));
 
 			Console.WriteLine(Generator
-				.New(new GeneratorSettings{IncludeInheritedTypes = true})
+                .New(new GeneratorSettings { IncludeInheritedTypes = true, GenerateNumberTypeForDictionaryKeys = true})
 				.Module("Api", b => b.Include<ComplexExample>().Include<Classes.Example>())
 				.Export("Api.Enums", sb =>
 					sb.Include<FirstEnum>().Include<SecondEnum>())
