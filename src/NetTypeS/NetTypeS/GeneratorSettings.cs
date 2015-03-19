@@ -87,6 +87,8 @@ namespace NetTypeS
 
 		public bool IncludeInheritedTypes { get; set; }
 
+        public bool GenerateNumberTypeForDictionaryKeys { get; set; }
+
 		#endregion
 
 		/// <summary>
@@ -106,7 +108,8 @@ namespace NetTypeS
 				       PropertyNameFormatter = PropertyNameFormatter ?? Default.PropertyNameFormatter,
 				       PropertyFilter = PropertyFilter ?? Default.PropertyFilter,
 				       AllPropertiesAreOptional = AllPropertiesAreOptional,
-					   IncludeInheritedTypes = IncludeInheritedTypes
+					   IncludeInheritedTypes = IncludeInheritedTypes,
+                       GenerateNumberTypeForDictionaryKeys = GenerateNumberTypeForDictionaryKeys
 			       };
 			foreach (var assembly in InheritedTypeAssemblies)
 			{

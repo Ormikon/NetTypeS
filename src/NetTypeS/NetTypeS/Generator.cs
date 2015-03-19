@@ -26,7 +26,10 @@ namespace NetTypeS
 		{
 			this.settings = settings.Clone();
 			inheritedTypeSpy = new InheritedTypeSpy(settings.InheritedTypeAssemblies.ToArray());
-			collector = new TypeCollector(inheritedTypeSpy, settings.IncludeInheritedTypes);
+            collector = new TypeCollector(inheritedTypeSpy, 
+                settings.IncludeInheritedTypes, 
+                settings.GenerateNumberTypeForDictionaryKeys
+            );
 		}
 
 		/// <summary>

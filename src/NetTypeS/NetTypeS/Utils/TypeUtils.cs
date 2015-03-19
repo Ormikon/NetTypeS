@@ -45,10 +45,37 @@ namespace NetTypeS.Utils
 			return type.GetCollectionType() != null;
 		}
 
+        public static bool IsDictionary(this Type type)
+        {
+            return type.GetDictionaryTypes() != null;
+        }
+
 		public static bool IsEnum(this Type type)
 		{
 			return type.IsValueType && type.IsEnum;
 		}
+
+        public static bool IsNumber(this Type type)
+        {
+            if (type.IsValueType)
+            {
+                var tc = Type.GetTypeCode(type);
+                switch (tc)
+                {
+                    case TypeCode.Int16:
+                    case TypeCode.Int32:
+                    case TypeCode.Int64:
+                    case TypeCode.UInt16:
+                    case TypeCode.UInt32:
+                    case TypeCode.UInt64:
+                    case TypeCode.SByte:
+                    case TypeCode.Byte:
+                    case TypeCode.Decimal:
+                        return true;
+                }
+            }
+            return false;
+        }
 
 		public static bool IsSimple(this Type type)
 		{
@@ -110,6 +137,17 @@ namespace NetTypeS.Utils
 			interfaceType = GetTypeInterface(typeof (IEnumerable), type);
 			return interfaceType == null ? null : typeof (object);
 		}
+
+        public static Type[] GetDictionaryTypes(this Type type)
+        {
+            var dictionaryInterface = GetTypeInterface(typeof(IDictionary<,>), type);
+            if (dictionaryInterface != null)
+            {
+                //TODO: fix for generics
+                return dictionaryInterface.GenericTypeArguments.ToArray();
+            }
+            return null;
+        }
 
 		public static IEnumValue[] GetEnumTypeValues(this Type type)
 		{
