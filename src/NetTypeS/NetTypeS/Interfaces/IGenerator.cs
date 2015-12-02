@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NetTypeS.Types;
+using System.Collections.Generic;
 
 namespace NetTypeS.Interfaces
 {
@@ -16,17 +17,24 @@ namespace NetTypeS.Interfaces
 		/// <returns>Found or created module.</returns>
 		IGeneratorModule GetModule(string moduleName, bool decalration = false, bool export = false);
 
-		/// <summary>
-		/// Generates TypeScript with pointed exportedModules or with all if them are not pointed
-		/// </summary>
-		/// <param name="exportedModules">Modules for generation.</param>
-		/// <returns>Generated string.</returns>
-		string Generate(params string[] exportedModules);
+        /// <summary>
+        /// Generates TypeScript with namespace hierarchy. You can optionally specify particular namespaces to generate with exportedNamespaces parameter.
+        /// </summary>
+        /// <param name="exportedNamespaces">Namespaces for generation.</param>
+        /// <returns>Generated string.</returns>
+        string GenerateNamespaces(params string[] exportedNamespaces);
 
-		/// <summary>
-		/// Contains information about custom names registered in the generator.
-		/// </summary>
-		ICustomTypeNameHolder CustomTypeNameHolder { get; }
+        /// <summary>
+        /// Generates single ES6 TypeScript module
+        /// </summary>
+        /// <param name="exportedModule">Modules to generate.</param>
+        /// <returns>Generated string.</returns>
+        string GenerateModule(string exportedModule);
+
+        /// <summary>
+        /// Contains information about custom names registered in the generator.
+        /// </summary>
+        ICustomTypeNameHolder CustomTypeNameHolder { get; }
 
 		/// <summary>
 		/// Type collector. Collects information about types added for generation.
@@ -47,5 +55,5 @@ namespace NetTypeS.Interfaces
 		/// TypeScript file references.
 		/// </summary>
 		ICollection<string> References { get; }
-	}
+    }
 }

@@ -12,7 +12,8 @@ namespace NetTypeS
 	internal class GeneratorModule : ITypeScriptElement, IGeneratorModule
 	{
 		private readonly ICollection<IDynamicElement> elements = new List<IDynamicElement>();
-		private readonly string name;
+        private readonly ICollection<ModuleImport> imports = new List<ModuleImport>();
+        private readonly string name;
 		private readonly IGeneratorModule parent;
 		private readonly IGenerator generator;
 		private readonly bool declaration;
@@ -61,7 +62,12 @@ namespace NetTypeS
 			get { return elements; }
 		}
 
-		public string Name
+        public ICollection<ModuleImport> Imports
+        {
+            get { return imports; }
+        }
+
+        public string Name
 		{
 			get { return name; }
 		}
@@ -109,7 +115,24 @@ namespace NetTypeS
 		{
 			var moduleContext = new GeneratorModuleContext(FullName, context.Builder, generator.TypeCollector,
 				generator.CustomTypeNameHolder, generator.Settings);
-			foreach (var element in this)
+
+            if (imports.Count > 0)
+            {
+                foreach (var import in imports)
+                {
+                    if (import.Alias != null)
+                    {
+                        context.Builder.AppendLine($"import * as {import.Alias} from '{import.Module}';");
+                    }
+                    else
+                    {
+                        context.Builder.AppendLine($"import {{ { string.Join(", ", import.Bindings) } }} from '{import.Module}';");
+                    }
+                }
+                context.Builder.AppendLine();
+            }
+
+            foreach (var element in this)
 			{
 				element.Generate(moduleContext);
 				context.Builder.AppendLine();

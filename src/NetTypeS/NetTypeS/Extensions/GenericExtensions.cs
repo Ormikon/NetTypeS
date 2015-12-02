@@ -1,6 +1,7 @@
 ﻿using System;
 using NetTypeS.Delegates;
 using NetTypeS.Interfaces;
+using NetTypeS.Types;
 
 
 // ReSharper disable CheckNamespace
@@ -256,5 +257,42 @@ namespace NetTypeS
 		{
 			return generatorModule.Include(typeof(T), name);
 		}
-	}
+
+        /// <summary>
+        /// Generates ES6 import clause, using "import { a, b, c } from 'module_path'" syntax.
+        /// </summary>
+        /// <param name="generatorModule">Generator module</param>
+        /// <param name="moduleName">Bindings to generate</param>
+        /// <param name="moduleBuilder">Module name (path) to import</param>
+        /// <returns>Current generator module.</returns>
+        public static IGeneratorModule Import(this IGeneratorModule generatorModule, string[] bindings, string moduleName)
+        {
+            generatorModule.Imports.Add(new ModuleImport
+            {
+                Module = moduleName,
+                Bindings = bindings
+            });
+
+            return generatorModule;
+        }
+
+        /// <summary>
+        /// Generates ES6 import clause, using "import * as alias from 'module_path'" syntax
+        /// </summary>
+        /// <param name="generatorModule">Generator module</param>
+        /// <param name="alias">Alias name to generate</param>
+        /// <param name="moduleBuilder">Module name (path) to import</param>
+        /// <returns>Current generator module.</returns>
+        public static IGeneratorModule Import(this IGeneratorModule generatorModule, string alias, string moduleName)
+        {
+            generatorModule.Imports.Add(new ModuleImport
+            {
+                Module = moduleName,
+                Alias = alias
+            });
+
+            return generatorModule;
+        }
+
+    }
 }

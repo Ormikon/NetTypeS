@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NetTypeS.Types;
+using System.Collections.Generic;
 
 namespace NetTypeS.Interfaces
 {
@@ -22,10 +23,15 @@ namespace NetTypeS.Interfaces
 		/// </summary>
 		ICollection<IDynamicElement> DynamicElements { get; }
 
-		/// <summary>
-		/// Module name. Empty for root module.
-		/// </summary>
-		string Name { get; }
+        /// <summary>
+        /// Collection of the module ES6 imports
+        /// </summary>
+        ICollection<ModuleImport> Imports { get; }
+
+        /// <summary>
+        /// Module name. Empty for root module.
+        /// </summary>
+        string Name { get; }
 
 		/// <summary>
 		/// Module full name.

@@ -22,37 +22,37 @@ namespace NetTypeS.Example
 		{
             Console.WriteLine(Generator
                 .New()
-                .Module(b => b.Include<IComplexExample>()).Generate());
+                .Module(b => b.Include<IComplexExample>()).GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
             Console.WriteLine(Generator
                 .New()
-                .Module("Api", b => b.Include<IComplexExample>()).Generate());
+                .Module("Api", b => b.Include<IComplexExample>()).GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
             Console.WriteLine(Generator
                 .New()
-                .Export("", b => b.Include<IComplexExample>()).Generate());
+                .Export("", b => b.Include<IComplexExample>()).GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
             Console.WriteLine(Generator
                 .New()
-                .Export("Api", b => b.Include<IComplexExample>()).Generate());
+                .Export("Api", b => b.Include<IComplexExample>()).GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
             Console.WriteLine(Generator
                 .New()
-                .Declare("", b => b.Include<IComplexExample>()).Generate());
+                .Declare("", b => b.Include<IComplexExample>()).GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
             Console.WriteLine(Generator
                 .New()
-                .Declare("Api", b => b.Include<IComplexExample>()).Generate());
+                .Declare("Api", b => b.Include<IComplexExample>()).GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
@@ -61,7 +61,7 @@ namespace NetTypeS.Example
                 .Module("Api", b => b.Include<IComplexExample>())
                 .Module("ApiEnums", b =>
                     b.Include<FirstEnum>().Include<SecondEnum>())
-                .Generate());
+                .GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
@@ -71,7 +71,7 @@ namespace NetTypeS.Example
                     b.Include<IComplexExample>()
                     .Export("Enums", sb =>
                     sb.Include<FirstEnum>().Include<SecondEnum>()))
-                .Generate());
+                .GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
@@ -80,7 +80,7 @@ namespace NetTypeS.Example
                 .Module("Api", b => b.Include<IComplexExample>())
                 .Export("Api.Enums", sb =>
                     sb.Include<FirstEnum>().Include<SecondEnum>())
-                .Generate());
+                .GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
@@ -89,7 +89,7 @@ namespace NetTypeS.Example
                 .Module("Api", b => b.Include<IComplexExample>())
                 .Module("Api.Enums", sb =>
                     sb.Include<FirstEnum>().Include<SecondEnum>())
-                .Generate("Api"));
+                .GenerateNamespaces("Api"));
 
             Console.WriteLine(new string('=', 30));
 
@@ -98,7 +98,7 @@ namespace NetTypeS.Example
                 .Module("Api", b => b.Include<IComplexExample>())
                 .Module("Api.Enums", sb =>
                     sb.Include<FirstEnum>().Include<SecondEnum>())
-                .Generate("Api.Enums"));
+                .GenerateNamespaces("Api.Enums"));
 
             Console.WriteLine(new string('=', 30));
 
@@ -122,7 +122,7 @@ namespace NetTypeS.Example
                                 .AddText(";")
                                 .AddLine()
                         ))
-                .Generate());
+                .GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
@@ -132,21 +132,21 @@ namespace NetTypeS.Example
                 .Export("Api.Enums", sb =>
                     sb.Include<FirstEnum>().Include<SecondEnum>())
                 .Replace<IExample, Classes.Example>()
-                .Generate());
+                .GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
             Console.WriteLine(Generator
                 .New()
                 .Module("Generics", b => b.Include<ComplexGeneric<string, DateTime>>())
-                .Generate());
+                .GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
             Console.WriteLine(Generator
                 .New()
                 .Module("Generics", b => b.Include<ClassWithGenericProps>())
-                .Generate());
+                .GenerateNamespaces());
 
             Console.WriteLine(new string('=', 30));
 
@@ -155,9 +155,17 @@ namespace NetTypeS.Example
 				.Module("Api", b => b.Include<ComplexExample>().Include<Classes.Example>())
 				.Export("Api.Enums", sb =>
 					sb.Include<FirstEnum>().Include<SecondEnum>())
-				.Generate());
+				.GenerateNamespaces());
 
-			Console.ReadKey();
+            Console.WriteLine(Generator
+                .New()
+                .Module("testModule", b => b
+                    .Import(new[] { "testVar1", "testVar1" }, "./somemodule")
+                    .Import("all", "/some/other/module")
+                    .Include<IComplexExample>()
+                ).GenerateModule("testModule"));
+
+            Console.ReadKey();
 		}
 	}
 }

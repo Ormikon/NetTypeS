@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NetTypeS.Interfaces;
+using NetTypeS.Types;
 using NetTypeS.Utils;
 
 namespace NetTypeS
@@ -15,7 +16,7 @@ namespace NetTypeS
 		private readonly IInheritedTypeSpy inheritedTypeSpy;
 		private readonly ITypeCollector collector;
 		private readonly ICollection<string> references = new List<string>();
-		private readonly IList<string> modulesOrder = new List<string>();
+        private readonly IList<string> modulesOrder = new List<string>();
 
 		private readonly IDictionary<string, IGeneratorModule> modules =
 			new Dictionary<string, IGeneratorModule>(StringComparer.Ordinal);
@@ -112,7 +113,7 @@ namespace NetTypeS
 					.ToArray();
 		}
 
-		private void GenerateModule(GeneratorModulesTree tree, string parentModuleName, IGeneratorModuleContext context)
+		private void GenerateNamespace(GeneratorModulesTree tree, string parentModuleName, IGeneratorModuleContext context)
 		{
 			var m = modules[tree.Root ?? ""];
 			var el = (ITypeScriptElement) m;
@@ -121,7 +122,7 @@ namespace NetTypeS
 				if (tree.Child != null)
 					foreach (var child in tree.Child)
 					{
-						GenerateModule(child, tree.Root, context);
+						GenerateNamespace(child, tree.Root, context);
 					}
 				el.Generate(context);
 			}
@@ -142,7 +143,7 @@ namespace NetTypeS
 					if (tree.Child != null)
 						foreach (var child in tree.Child)
 						{
-							GenerateModule(child, tree.Root, context);
+							GenerateNamespace(child, tree.Root, context);
 						}
 					el.Generate(context);
 				}
@@ -151,42 +152,62 @@ namespace NetTypeS
 			}
 		}
 
-		public string Generate(params string[] exportedModules)
-		{
-			var builder = new ScriptBuilder(settings.Format.Indent, settings.Format.IndentChar,
-				settings.Format.IndentSize);
+        private void GenerateReferences(ScriptBuilder builder)
+        {
+            if (references.Count > 0)
+                foreach (var reference in references)
+                {
+                    builder.Append("/// <reference path=\"");
+                    builder.Append(reference);
+                    builder.AppendLine("\" />");
+                }
+        }
 
-			if (references.Count > 0)
-				foreach (var reference in references)
-				{
-					builder.Append("/// <reference path=\"");
-					builder.Append(reference);
-					builder.AppendLine("\" />");
-				}
+        public string GenerateNamespaces(params string[] exportedNamespaces)
+        {
+            var builder = new ScriptBuilder(settings.Format.Indent, settings.Format.IndentChar,
+                settings.Format.IndentSize);
 
-			var context = new GeneratorModuleContext(null, builder, collector, customNamesHolder, settings);
-			var modulesForBuild = modulesOrder;
+            GenerateReferences(builder);
 
-			if (exportedModules != null && exportedModules.Length > 0)
-			{
-				var filter = new HashSet<string>(exportedModules.Where(m => m != null).Distinct());
-				modulesForBuild = modulesOrder.Where(filter.Contains).ToArray();
-			}
+            var context = new GeneratorModuleContext(null, builder, collector, customNamesHolder, settings);
+            var modulesForBuild = modulesOrder;
 
-			if (modulesForBuild.Count == 0)
-				return builder.ToString();
+            if (exportedNamespaces != null && exportedNamespaces.Length > 0)
+            {
+                var filter = new HashSet<string>(exportedNamespaces.Where(m => m != null).Distinct());
+                modulesForBuild = modulesOrder.Where(filter.Contains).ToArray();
+            }
 
-			var tree = BuildModulesTree(modulesForBuild);
+            if (modulesForBuild.Count == 0)
+                return builder.ToString();
 
-			foreach (var modulesTree in tree)
-			{
-				GenerateModule(modulesTree, null, context);
-			}
+            var tree = BuildModulesTree(modulesForBuild);
 
-			return builder.ToString();
-		}
+            foreach (var modulesTree in tree)
+            {
+                GenerateNamespace(modulesTree, null, context);
+            }
 
-		public ICustomTypeNameHolder CustomTypeNameHolder
+            return builder.ToString();
+        }
+
+        public string GenerateModule(string moduleName)
+        {
+            var builder = new ScriptBuilder(settings.Format.Indent, settings.Format.IndentChar,
+                settings.Format.IndentSize);
+
+            GenerateReferences(builder);
+
+            var context = new GeneratorModuleContext(null, builder, collector, customNamesHolder, settings);
+
+            var module = (ITypeScriptElement)modules[moduleName];
+            module.Generate(context);
+
+            return builder.ToString();
+        }
+
+        public ICustomTypeNameHolder CustomTypeNameHolder
 		{
 			get { return customNamesHolder; }
 		}
@@ -211,6 +232,6 @@ namespace NetTypeS
 			get { return references; }
 		}
 
-		#endregion
-	}
+        #endregion
+    }
 }

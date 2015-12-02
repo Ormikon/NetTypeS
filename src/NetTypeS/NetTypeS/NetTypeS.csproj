@@ -98,6 +98,7 @@
     <Compile Include="Interfaces\ICollectionType.cs" />
     <Compile Include="Interfaces\IEnumType.cs" />
     <Compile Include="Interfaces\IComplexType.cs" />
+    <Compile Include="Types\ModuleImport.cs" />
     <Compile Include="Utils\DisposableIndent.cs" />
     <Compile Include="Interfaces\IGeneratorModule.cs" />
     <Compile Include="Utils\CustomTypeNameHolder.cs" />
