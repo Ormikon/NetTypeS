@@ -32,7 +32,10 @@ namespace NetTypeS.WebApi
             this.apiModuleName = apiModuleName;
         }
 
-        public GeneratedFiles GenerateAll(IApiExplorer explorer, Func<ApiDescription, bool> apiFilter = null)
+        public GeneratedFiles GenerateAll(
+            IApiExplorer explorer,
+            Func<ApiDescription, bool> apiFilter = null, 
+            IEnumerable<Type> additionalTypes = null)
         {
             var types = Generator.New(new GeneratorSettings { IncludeInheritedTypes = true, GenerateNumberTypeForDictionaryKeys = true });
 
@@ -44,6 +47,11 @@ namespace NetTypeS.WebApi
 
             var modelsModule = types.Module("models", m => {
                 RegisterTypes(m, apiDescriptions);
+
+                if (additionalTypes != null) {
+                    additionalTypes.ForEach((t, b) => m.Include(t));
+                }
+
                 m.ForEnums(et =>
                     Element.New()
                         .AddText("export var ")
