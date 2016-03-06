@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Ormikon.NetTypeS</id>
+    <id>Ormikon.NetTypeS.WebApi</id>
     <version>1.0.0</version>
-    <title>NetTypeS</title>
+    <title>NetTypeS.WebApi</title>
     <authors>Ormikon</authors>
     <owners>Ormikon</owners>
     <licenseUrl>https://github.com/Ormikon/NetTypeS/blob/master/LICENSE</licenseUrl>
@@ -11,20 +11,21 @@
     <iconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      The package with classes for generating TypeScript declarations and code.
+      Generates TypeScript definitions from ASP.NET Web.API.
     </description>
     <summary>
-      NetTypeS package.
+      NetTypeS.WebApi package.
     </summary>
-    <releaseNotes>GetCollectionType any exception fix.</releaseNotes>
+    <releaseNotes>Initial release.</releaseNotes>
     <copyright>Copyright Ormikon 2014</copyright>
     <tags>typescript,ts,javascript,generator</tags>
     <dependencies>
+
     </dependencies>
   </metadata>
   <files>
-    <file src="..\src\NetTypes\NetTypes\bin\Release\NetTypeS.dll" target="lib\net45" />
-    <file src="..\src\NetTypes\NetTypes\bin\Release\NetTypeS.pdb" target="lib\net45" />
-    <file src="..\src\NetTypes\NetTypes\bin\Release\NetTypeS.XML" target="lib\net45" />
+    <file src="..\src\NetTypes\NetTypes.WebApi\bin\Release\NetTypeS.dll" target="lib\net45" />
+    <file src="..\src\NetTypes\NetTypes.WebApi\bin\Release\NetTypeS.pdb" target="lib\net45" />
+    <file src="..\src\NetTypes\NetTypes.WebApi\bin\Release\NetTypeS.XML" target="lib\net45" />
   </files>
 </package>
