@@ -25,30 +25,38 @@ namespace NetTypeS.WebApi
     {
         string promiseType;
         string apiModuleName;
+        Func<ApiDescription, bool> apiFilter;
 
-        public WebApiGenerator(string promiseType = "JQueryPromise", string apiModuleName = "apiDefinition")
+        public WebApiGenerator(
+            string promiseType = "Promise",
+            string apiModuleName = "apiDefinition",
+            Func<ApiDescription, bool> apiFilter = null
+        )
         {
             this.promiseType = promiseType;
             this.apiModuleName = apiModuleName;
+            this.apiFilter = apiFilter;
         }
 
         public GeneratedFiles GenerateAll(
             IApiExplorer explorer,
-            Func<ApiDescription, bool> apiFilter = null, 
             IEnumerable<Type> additionalTypes = null)
         {
             var types = Generator.New(new GeneratorSettings { IncludeInheritedTypes = true, GenerateNumberTypeForDictionaryKeys = true });
 
             var apiDescriptions = explorer.ApiDescriptions.AsEnumerable();
 
-            if (apiFilter != null) {
-                apiDescriptions = apiDescriptions.Where(a => apiFilter(a));
+            if (this.apiFilter != null)
+            {
+                apiDescriptions = apiDescriptions.Where(a => this.apiFilter(a));
             };
 
-            var modelsModule = types.Module("models", m => {
+            var modelsModule = types.Module("models", m =>
+            {
                 RegisterTypes(m, apiDescriptions);
 
-                if (additionalTypes != null) {
+                if (additionalTypes != null)
+                {
                     additionalTypes.ForEach((t, b) => m.Include(t));
                 }
 
@@ -185,6 +193,10 @@ namespace NetTypeS.WebApi
             var apiCallBlock = Element.New()
                     .AddText($"return processRequest(")
                     .AddText("`/" + ReplaceQueryPlaceholders(endpoint.RelativePath) + "`");
+
+            apiCallBlock
+                .AddText(", ")
+                .AddText($"`{endpoint.HttpMethod.Method}`");
 
             if (parameters.Any(p => !p.IsQuery))
             {
