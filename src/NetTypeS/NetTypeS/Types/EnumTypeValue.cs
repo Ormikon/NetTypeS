@@ -18,11 +18,11 @@ namespace NetTypeS.Types
 			customAttributes = new Lazy<Attribute[]>(() => enumMemberInfo.GetCustomAttributes<Attribute>().ToArray());
 		}
 
-		public int ValueAsInt32()
+		public long ValueAsInt64()
 		{
 			if (value == null)
 				throw new InvalidOperationException("Enumerable element value is not assigned.");
-			return Convert.ToInt32(value);
+			return Convert.ToInt64(value);
 		}
 
 		public string Name

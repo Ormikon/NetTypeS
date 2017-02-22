@@ -1,6 +1,5 @@
 ﻿using NetTypeS;
 using NetTypeS.Utils;
-using NetTypeS.WebApi.Utils;
 using NetTypeS.Elements.Primitives;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web.Http.Description;
 using NetTypeS.Interfaces;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace NetTypeS.WebApi
 {
@@ -51,36 +51,21 @@ namespace NetTypeS.WebApi
                 apiDescriptions = apiDescriptions.Where(a => this.apiFilter(a));
             };
 
+            var controllers = apiDescriptions.Select(api => new EndpointInfo(api));
+            
             var modelsModule = types.Module("models", m =>
             {
-                RegisterTypes(m, apiDescriptions);
+                controllers.ForEach(c => c.RegisterTypes(m));
 
                 if (additionalTypes != null)
                 {
                     additionalTypes.ForEach((t, b) => m.Include(t));
                 }
 
-                m.ForEnums(et =>
-                    Element.New()
-                        .AddText("export var ")
-                        .AddText(NetTypeS.Utils.StringUtils.ToCamelCase(et.Name))
-                        .AddText("Names = ")
-                        .AddBlock(et.Values.Select((ev, i) =>
-                            Element.New()
-                                .AddText(ev.ValueAsInt32().ToString(CultureInfo.InvariantCulture))
-                                .AddText(": \"")
-                                .AddText(
-                                    ev.CustomAttributes.OfType<DisplayAttribute>().Select(a => a.Name).SingleOrDefault()
-                                    ?? PascalCaseToWords(ev.Name)
-                                )
-                                .AddText("\"")
-                                .AddIf(() => i != et.Values.Count - 1, e => e.AddText(","))))
-                        .AddText(";")
-                        .AddLine()
-                );
+                EnumHelper.GenerateEnumNameLookups(m);
             });
 
-            var endpointsByController = apiDescriptions.ToLookup(a => a.ActionDescriptor.ControllerDescriptor.ControllerName);
+            var endpointsByController = controllers.ToLookup(c => c.ControllerName);
 
             var apiModule = types.Module(this.apiModuleName, apiBuilder =>
             {
@@ -106,8 +91,12 @@ namespace NetTypeS.WebApi
 
                     var methodsBlockContent = Element.New();
 
-                    controllerEndpointsGroup
-                        .Select(m => GenerateFunction(m))
+                    var controllerEndpoints = controllerEndpointsGroup
+                        .GroupBy(e => e.ActionName)
+                        .SelectMany(overloads => RenameOverloads(overloads));
+
+                    controllerEndpoints
+                        .Select(m => m.GenerateFunction(promiseType))
                         .ForEach((m, n) =>
                         {
                             if (n > 0)
@@ -142,111 +131,19 @@ namespace NetTypeS.WebApi
             };
         }
 
-        private ITypeScriptElement GenerateFunction(ApiDescription endpoint)
+        IEnumerable<EndpointInfo> RenameOverloads(IEnumerable<EndpointInfo> endpoints)
         {
-            var actionName = endpoint.ActionDescriptor.ActionName;
+            var needToAppendMethod = endpoints.GroupBy(e => e.HttpMethodName).Count() > 1;
 
-            var method = Element.New()
-                .AddText(NetTypeS.Utils.StringUtils.ToCamelCase(actionName))
-                .AddText(": function(");
-
-            var parameters = endpoint.ParameterDescriptions.Select(p => new
+            if (needToAppendMethod)
             {
-                Name = NetTypeS.Utils.StringUtils.ToCamelCase(p.Name),
-                DataType = p.ParameterDescriptor.ParameterType,
-                IsQuery = p.Source == ApiParameterSource.FromUri
-            }).ToArray();
-
-            if (parameters.Count(p => !p.IsQuery) > 1)
-            {
-                throw new ApplicationException(string.Format(
-                    "More than one request body parameter for method {0}.{1}. Consider making request class, or using query parameters",
-                    endpoint.ActionDescriptor.ControllerDescriptor.ControllerName,
-                    actionName));
+                endpoints.ForEach(e => e.GeneratedName = StringUtils.ToCamelCase(e.HttpMethodName + e.ActionName));
+                return endpoints.GroupBy(e => e.GeneratedName).SelectMany(g => RenameOverloads(endpoints));
             }
 
-            parameters.ForEach((p, n) =>
-            {
-                method.AddText(p.Name);
-                method.AddText(" : ");
-                method.AddTypeLink(p.DataType);
+            endpoints.ForEach((e, n) => e.GeneratedName = e.GeneratedName + (n > 0 ? n.ToString() : ""));
 
-                if (n != parameters.Length - 1)
-                {
-                    method.AddText(", ");
-                }
-            });
-
-            method.AddText(")");
-
-            method.AddText(" : " + promiseType + "<");
-            if (endpoint.ActionDescriptor.ReturnType != null)
-            {
-                method.AddTypeLink(endpoint.ActionDescriptor.ReturnType);
-            }
-            else
-            {
-                method.AddText("void");
-            }
-            method.AddText("> ");
-
-            var apiCallBlock = Element.New()
-                    .AddText($"return processRequest(")
-                    .AddText("`/" + ReplaceQueryPlaceholders(endpoint.RelativePath) + "`");
-
-            apiCallBlock
-                .AddText(", ")
-                .AddText($"`{endpoint.HttpMethod.Method}`");
-
-            if (parameters.Any(p => !p.IsQuery))
-            {
-                apiCallBlock
-                    .AddText(", ")
-                    .AddText(parameters.FirstOrDefault(p => !p.IsQuery).Name);
-            }
-
-            apiCallBlock.AddText(")");
-
-            method.AddBlock(apiCallBlock);
-
-            return method;
-        }
-
-        private void RegisterTypes(IGeneratorModule module, IEnumerable<ApiDescription> descriptions)
-        {
-            foreach (var description in descriptions)
-            {
-                module.Include(description.ResponseDescription.ResponseType ??
-                               description.ResponseDescription.DeclaredType);
-                foreach (var parameterDescription in description.ParameterDescriptions)
-                {
-                    module.Include(parameterDescription.ParameterDescriptor.ParameterType);
-                }
-            }
-        }
-
-        private static string ReplaceQueryPlaceholders(string url)
-        {
-            return url.Replace("{", "${");
-        }
-
-        private static string PascalCaseToWords(string ident)
-        {
-            if (ident == null)
-            {
-                return null;
-            }
-
-            StringBuilder sb = new StringBuilder();
-            for (var n = 0; n < ident.Length; n++)
-            {
-                if (n > 0 && Char.IsUpper(ident[n]) && n < ident.Length - 1 && Char.IsLower(ident[n + 1]))
-                {
-                    sb.Append(' ');
-                }
-                sb.Append(ident[n]);
-            }
-            return sb.ToString();
+            return endpoints;
         }
     }
 }

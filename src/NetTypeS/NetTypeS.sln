@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTypeS", "NetTypeS\NetTypeS.csproj", "{F17DF5D1-AECE-4154-AD73-E385D1C72BB0}"
 EndProject
@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTypeS.WebApi", "NetTypeS.WebApi\NetTypeS.WebApi.csproj", "{66C973B7-9550-4F2F-AEF2-26141AE91F4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTypeS.Console", "NetTypeS.Console\NetTypeS.Console.csproj", "{DC359DB9-3A0F-4EBF-8DDF-89E1626DABB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{66C973B7-9550-4F2F-AEF2-26141AE91F4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66C973B7-9550-4F2F-AEF2-26141AE91F4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66C973B7-9550-4F2F-AEF2-26141AE91F4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC359DB9-3A0F-4EBF-8DDF-89E1626DABB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC359DB9-3A0F-4EBF-8DDF-89E1626DABB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC359DB9-3A0F-4EBF-8DDF-89E1626DABB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC359DB9-3A0F-4EBF-8DDF-89E1626DABB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

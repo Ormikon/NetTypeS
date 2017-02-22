@@ -7,7 +7,7 @@ namespace NetTypeS.Interfaces
 	/// </summary>
 	public interface IEnumValue
 	{
-		int ValueAsInt32();
+		long ValueAsInt64();
 		string Name { get; }
 		object Value { get; }
 		bool HasValue { get; }

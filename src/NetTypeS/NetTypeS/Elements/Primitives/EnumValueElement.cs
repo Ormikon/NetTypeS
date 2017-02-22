@@ -44,7 +44,7 @@ namespace NetTypeS.Elements.Primitives
 				var name = context.NameResolver.GetEnumValueName(enumValue);
 				context.Builder.Append(name);
 				context.Builder.Append(" = ");
-				context.Builder.Append(enumValue.ValueAsInt32().ToString(CultureInfo.InvariantCulture));
+				context.Builder.Append(enumValue.ValueAsInt64().ToString(CultureInfo.InvariantCulture));
 			}
 			else
 			{

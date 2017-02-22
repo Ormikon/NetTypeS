@@ -114,7 +114,7 @@ namespace NetTypeS.Example
                                 .AddText("Names = ")
                                 .AddBlock(et.Values.Select((ev, i) =>
                                     Element.New()
-                                        .AddText(ev.ValueAsInt32().ToString(CultureInfo.InvariantCulture))
+                                        .AddText(ev.ValueAsInt64().ToString(CultureInfo.InvariantCulture))
                                         .AddText(": \"")
                                         .AddText(ev.Name)
                                         .AddText("\"")

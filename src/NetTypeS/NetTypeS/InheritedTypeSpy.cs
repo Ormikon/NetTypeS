@@ -45,7 +45,17 @@ namespace NetTypeS
 			var loadedAssemblies = assemblies == null || assemblies.Length == 0 ? AppDomain.CurrentDomain.GetAssemblies() : assemblies;
 			foreach (var assembly in loadedAssemblies)
 			{
-				var assemblyTypes = assembly.GetTypes();
+                Type[] assemblyTypes = new Type[0];
+                try
+                {
+                    assemblyTypes = assembly.GetTypes();
+                }
+                catch(ReflectionTypeLoadException)
+                {
+                    // Ignore assemblies for which we unable to load some types.
+                    // This happens often, as types are loaded lazily, and application itself doesn't require all types in used assemblies.
+                }
+
 				foreach (var type in assemblyTypes)
 				{
 					// we skip from processing some types

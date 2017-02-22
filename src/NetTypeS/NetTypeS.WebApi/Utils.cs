@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetTypeS.WebApi.Utils
+namespace NetTypeS.WebApi
 {
     internal static class Utils
     {
@@ -21,6 +22,21 @@ namespace NetTypeS.WebApi.Utils
                 action(entity, i);
                 i++;
             }
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+        {
+            collection.ForEach((i, n) => action(i));
+        }
+
+        public static Type ReplaceUnsupportedTypesWithAny(Type type)
+        {
+            if (type == typeof(HttpResponseMessage))
+            {
+                return typeof(object);
+            }
+
+            return type;
         }
     }
 }
