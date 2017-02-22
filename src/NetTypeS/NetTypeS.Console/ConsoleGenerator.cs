@@ -15,11 +15,13 @@ namespace NetTypeS
     {
         string sourceAssemblyPath;
         string outputFolder;
+        string[] exclude;
 
-        public ConsoleGenerator(string sourceAssemblyPath, string outputFolder)
+        public ConsoleGenerator(string sourceAssemblyPath, string outputFolder, string[] exclude)
         {
             this.sourceAssemblyPath = sourceAssemblyPath;
             this.outputFolder = outputFolder;
+            this.exclude = exclude ?? new string[0];
         }
 
         public void UpdateFile(string fileName, string newContent)
@@ -61,7 +63,7 @@ namespace NetTypeS
 
         private bool IsSuitableApi(ApiDescription api)
         {
-            return true;
+            return !exclude.Contains(api.ActionDescriptor.ControllerDescriptor.ControllerName);
         }
 
         private Assembly LoadFromTargetFolder(object sender, ResolveEventArgs args)

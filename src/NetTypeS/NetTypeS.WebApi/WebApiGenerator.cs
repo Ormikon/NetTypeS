@@ -12,6 +12,7 @@ using System.Web.Http.Description;
 using NetTypeS.Interfaces;
 using System.Diagnostics;
 using System.Net.Http;
+using NetTypeS.Attributes;
 
 namespace NetTypeS.WebApi
 {
@@ -44,7 +45,9 @@ namespace NetTypeS.WebApi
         {
             var types = Generator.New(new GeneratorSettings { IncludeInheritedTypes = true, GenerateNumberTypeForDictionaryKeys = true });
 
-            var apiDescriptions = explorer.ApiDescriptions.AsEnumerable();
+            var apiDescriptions = explorer.ApiDescriptions
+                .Where(api => !api.ActionDescriptor.GetCustomAttributes<NoTypeScriptGenerationAttrubute>().Any())
+                .AsEnumerable();
 
             if (this.apiFilter != null)
             {

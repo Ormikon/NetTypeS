@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Ormikon.NetTypeS.WebApi</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <title>NetTypeS.WebApi</title>
     <authors>Ormikon</authors>
     <owners>Ormikon</owners>
@@ -20,7 +20,7 @@
     <copyright>Copyright Ormikon 2014</copyright>
     <tags>typescript,ts,javascript,generator</tags>
     <dependencies>
-	<dependency id="Ormikon.NetTypeS" version="1.0.0" />
+	<dependency id="Ormikon.NetTypeS" version="1.0.1" />
 	<dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
     </dependencies>
   </metadata>

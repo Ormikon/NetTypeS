@@ -18,9 +18,11 @@ namespace NetTypeS
         [Verb(Description = "Generate TS interfaces and API definition files.")]
         public static void GenTS(
             [Description("Path to assembly containing WebApi classes.")] string assemblyPath,
-            [Description("Output folder for TS files.")] string outputFolder)
+            [Description("Output folder for TS files.")] string outputFolder,
+            [Description("Exclude controller from TS generation")] string[] exclude
+        )
         {
-            var gen = new ConsoleGenerator(assemblyPath, outputFolder);
+            var gen = new ConsoleGenerator(assemblyPath, outputFolder, exclude);
             gen.GenerateAll();
         }
     }

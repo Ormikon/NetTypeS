@@ -37,6 +37,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\NoTypescriptGenerationAttrubute.cs" />
     <Compile Include="Delegates\Delegates.cs" />
     <Compile Include="ElementFilter.cs" />
     <Compile Include="ElementNameFormatter.cs" />
