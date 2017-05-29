@@ -36,6 +36,11 @@ namespace NetTypeS.WebApi
                 return typeof(object);
             }
 
+            if (type == typeof(HttpRequestMessage))
+            {
+                return typeof(object);
+            }
+
             return type;
         }
     }
