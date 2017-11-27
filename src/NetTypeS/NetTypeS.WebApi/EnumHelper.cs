@@ -21,7 +21,9 @@ namespace NetTypeS.WebApi
                     .AddText("Names = ")
                     .AddBlock(et.Values.Select((ev, i) =>
                         Element.New()
+                            .AddText("\"")
                             .AddText(ev.ValueAsInt64().ToString(CultureInfo.InvariantCulture))
+                            .AddText("\"")
                             .AddText(": \"")
                             .AddText(
                                 ev.CustomAttributes.OfType<DisplayAttribute>().Select(a => a.Name).SingleOrDefault()
