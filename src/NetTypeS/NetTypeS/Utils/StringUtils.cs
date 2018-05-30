@@ -2,12 +2,12 @@
 
 namespace NetTypeS.Utils
 {
-	public static class StringUtils
-	{
-		public static string[] GetLines(this string str)
-		{
-			return str.Split('\n').Select(l => l.TrimEnd('\r')).ToArray();
-		}
+    public static class StringUtils
+    {
+        public static string[] GetLines(this string str)
+        {
+            return str.Split('\n').Select(l => l.TrimEnd('\r')).ToArray();
+        }
 
         public static string ToCamelCase(string s)
         {
@@ -30,5 +30,5 @@ namespace NetTypeS.Utils
 
             return new string(chars);
         }
-	}
+    }
 }

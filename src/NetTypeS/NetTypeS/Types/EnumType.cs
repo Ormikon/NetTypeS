@@ -7,69 +7,41 @@ using NetTypeS.Utils;
 
 namespace NetTypeS.Types
 {
-	internal sealed class EnumType : IEnumType
-	{
-		private readonly Type type;
-		private readonly string name;
-		private readonly string @namespace;
-		private readonly IReadOnlyList<IEnumValue> values;
-		private readonly Lazy<Attribute[]> customAttributes;
+    internal sealed class EnumType : IEnumType
+    {
+        private readonly Lazy<Attribute[]> customAttributes;
 
-		public EnumType(Type type)
-		{
-			if (!type.IsEnum)
-				throw new ArgumentException("Only Enum types supported.", "type");
+        public EnumType(Type type)
+        {
+            if (!type.IsEnum)
+                throw new ArgumentException("Only Enum types supported.", "type");
 
-			this.type = type;
-			name = type.Name;
-			@namespace = type.Namespace;
-			values = type.GetEnumTypeValues();
-			customAttributes = new Lazy<Attribute[]>(() => type.GetCustomAttributes<Attribute>().ToArray());
-		}
+            Type = type;
+            Name = type.Name;
+            Namespace = type.Namespace;
+            Values = type.GetEnumTypeValues();
+            customAttributes = new Lazy<Attribute[]>(() => type.GetCustomAttributes<Attribute>().ToArray());
+        }
 
-		public override string ToString()
-		{
-			return "Enum(" + name + "[" + string.Join(", ", Values) + "])";
-		}
+        public override string ToString()
+        {
+            return "Enum(" + Name + "[" + string.Join(", ", Values) + "])";
+        }
 
-		public Type Type
-		{
-			get { return type; }
-		}
+        public Type Type { get; }
 
-		public string Name
-		{
-			get { return name; }
-		}
+        public string Name { get; }
 
-		public string Namespace
-		{
-			get { return @namespace; }
-		}
+        public string Namespace { get; }
 
-		public string FullName
-		{
-			get { return @namespace + "." + name; }
-		}
+        public string FullName => Namespace + "." + Name;
 
-		public IReadOnlyList<IEnumValue> Values
-		{
-			get { return values; }
-		}
+        public IReadOnlyList<IEnumValue> Values { get; }
 
-		public TypeScriptTypeCode Code
-		{
-			get { return TypeScriptTypeCode.Enum; }
-		}
+        public TypeScriptTypeCode Code => TypeScriptTypeCode.Enum;
 
-		public bool IsRequired
-		{
-			get { return true; }
-		}
+        public bool IsRequired => true;
 
-		public Attribute[] CustomAttributes
-		{
-			get { return customAttributes.Value; }
-		}
-	}
+        public Attribute[] CustomAttributes => customAttributes.Value;
+    }
 }

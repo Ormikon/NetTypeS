@@ -3,53 +3,30 @@ using NetTypeS.Interfaces;
 
 namespace NetTypeS.Types
 {
-	internal class NullableType : INullableType
-	{
-		private readonly Type underlyingType;
+    internal class NullableType : INullableType
+    {
+        public NullableType(Type underlyingType)
+        {
+            UnderlyingType = underlyingType;
+        }
 
-		public NullableType(Type underlyingType)
-		{
-			this.underlyingType = underlyingType;
-		}
+        public override string ToString()
+        {
+            return "Nullable(" + UnderlyingType.Name + ")";
+        }
 
-		public override string ToString()
-		{
-			return "Nullable(" + underlyingType.Name + ")";
-		}
+        public Type UnderlyingType { get; }
 
-		public Type UnderlyingType
-		{
-			get { return underlyingType; }
-		}
+        public string Name => "";
 
-		public string Name
-		{
-			get { return ""; }
-		}
+        public string Namespace => "";
 
-		public string Namespace
-		{
-			get { return ""; }
-		}
+        public string FullName => "";
 
-		public string FullName
-		{
-			get { return ""; }
-		}
+        public TypeScriptTypeCode Code => TypeScriptTypeCode.Nullable;
 
-		public TypeScriptTypeCode Code
-		{
-			get { return TypeScriptTypeCode.Nullable; }
-		}
+        public bool IsRequired => false;
 
-		public bool IsRequired
-		{
-			get { return false; }
-		}
-
-		public Attribute[] CustomAttributes
-		{
-			get { return new Attribute[0]; }
-		}
-	}
+        public Attribute[] CustomAttributes => new Attribute[0];
+    }
 }

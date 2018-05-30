@@ -1,135 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F17DF5D1-AECE-4154-AD73-E385D1C72BB0}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NetTypeS</RootNamespace>
-    <AssemblyName>NetTypeS</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\NetTypeS.XML</DocumentationFile>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Types\" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Attributes\NoTypescriptGenerationAttrubute.cs" />
-    <Compile Include="Delegates\Delegates.cs" />
-    <Compile Include="ElementFilter.cs" />
-    <Compile Include="ElementNameFormatter.cs" />
-    <Compile Include="ElementNameResolver.cs" />
-    <Compile Include="Elements\Primitives\Element.cs" />
-    <Compile Include="Elements\Dynamic\DynamicElement.cs" />
-    <Compile Include="Elements\Dynamic\SingleDynamicElement.cs" />
-    <Compile Include="Elements\Primitives\EmptyElement.cs" />
-    <Compile Include="Elements\Primitives\EnumNameElement.cs" />
-    <Compile Include="Elements\Primitives\EnumValueElement.cs" />
-    <Compile Include="Elements\Primitives\EnumValueNameElement.cs" />
-    <Compile Include="Elements\Primitives\FixedElement.cs" />
-    <Compile Include="Elements\Primitives\BlockElement.cs" />
-    <Compile Include="Elements\Primitives\IndentedElement.cs" />
-    <Compile Include="Elements\Primitives\InterfaceNameElement.cs" />
-    <Compile Include="Elements\Primitives\ModuleNameElement.cs" />
-    <Compile Include="Elements\Primitives\MultilineTextElement.cs" />
-    <Compile Include="Elements\Primitives\NewLineElement.cs" />
-    <Compile Include="Elements\Primitives\PropertyElement.cs" />
-    <Compile Include="Elements\Primitives\PropertyNameElement.cs" />
-    <Compile Include="Elements\Primitives\TextElement.cs" />
-    <Compile Include="Elements\Primitives\TypeLinkElement.cs" />
-    <Compile Include="Elements\Primitives\TypeNameElement.cs" />
-    <Compile Include="Elements\TypeScriptComment.cs" />
-    <Compile Include="Elements\TypeScriptEnum.cs" />
-    <Compile Include="Elements\TypeScriptInterface.cs" />
-    <Compile Include="Extensions\ElementExtensions.cs" />
-    <Compile Include="Extensions\GenericExtensions.cs" />
-    <Compile Include="Extensions\ImportExtensions.cs" />
-    <Compile Include="Extensions\ModuleDynamicElementExtensions.cs" />
-    <Compile Include="Extensions\TypeCollectorExtensions.cs" />
-    <Compile Include="GeneratorFormatSettings.cs" />
-    <Compile Include="GeneratorModuleContext.cs" />
-    <Compile Include="GeneratorModule.cs" />
-    <Compile Include="GeneratorSettings.cs" />
-    <Compile Include="InheritedTypeSpy.cs" />
-    <Compile Include="Interfaces\IDictionaryType.cs" />
-    <Compile Include="Interfaces\IDynamicElement.cs" />
-    <Compile Include="Interfaces\IElementFilter.cs" />
-    <Compile Include="Interfaces\IInheritedTypeSpy.cs" />
-    <Compile Include="Interfaces\ITypeElementBuilder.cs" />
-    <Compile Include="Interfaces\IElementNameFormatter.cs" />
-    <Compile Include="Interfaces\IElementNameResolver.cs" />
-    <Compile Include="Interfaces\IGeneratorSettings.cs" />
-    <Compile Include="Interfaces\IEnumValue.cs" />
-    <Compile Include="Interfaces\IGeneratorFormatSettings.cs" />
-    <Compile Include="Interfaces\IGeneratorModuleContext.cs" />
-    <Compile Include="Interfaces\ICustomTypeNameHolder.cs" />
-    <Compile Include="Interfaces\IScriptBuilder.cs" />
-    <Compile Include="Interfaces\ITypeInfo.cs" />
-    <Compile Include="Interfaces\ITypeScriptElement.cs" />
-    <Compile Include="GeneratorModulesTree.cs" />
-    <Compile Include="Interfaces\ITypeCollector.cs" />
-    <Compile Include="TypeElementBuilder.cs" />
-    <Compile Include="TypeInfo.cs" />
-    <Compile Include="Types\DictionaryType.cs" />
-    <Compile Include="Types\EnumTypeValue.cs" />
-    <Compile Include="Interfaces\INullableType.cs" />
-    <Compile Include="Interfaces\ICollectionType.cs" />
-    <Compile Include="Interfaces\IEnumType.cs" />
-    <Compile Include="Interfaces\IComplexType.cs" />
-    <Compile Include="Types\ModuleImport.cs" />
-    <Compile Include="Utils\DisposableIndent.cs" />
-    <Compile Include="Interfaces\IGeneratorModule.cs" />
-    <Compile Include="Utils\CustomTypeNameHolder.cs" />
-    <Compile Include="Utils\ScriptBuilder.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeCollector.cs" />
-    <Compile Include="Generator.cs" />
-    <Compile Include="Interfaces\IGenerator.cs" />
-    <Compile Include="TypeMutator.cs" />
-    <Compile Include="Interfaces\ITypeProperty.cs" />
-    <Compile Include="Interfaces\ITypeScriptType.cs" />
-    <Compile Include="Types\CollectionType.cs" />
-    <Compile Include="Types\ComplexType.cs" />
-    <Compile Include="Types\ComplexTypeProperty.cs" />
-    <Compile Include="Types\EnumType.cs" />
-    <Compile Include="Types\NullableType.cs" />
-    <Compile Include="Types\SimpleType.cs" />
-    <Compile Include="Interfaces\TypeScriptTypeCode.cs" />
-    <Compile Include="Types\TypeScriptTypeNames.cs" />
-    <Compile Include="Utils\StringUtils.cs" />
-    <Compile Include="Utils\TypeUtils.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

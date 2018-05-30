@@ -4,57 +4,33 @@ using NetTypeS.Utils;
 
 namespace NetTypeS.Types
 {
-	internal sealed class CollectionType : ICollectionType
-	{
-		private readonly Type collectionType;
-		private readonly string @namespace;
+    internal sealed class CollectionType : ICollectionType
+    {
+        public CollectionType(Type type)
+        {
+            Type = type.GetCollectionType();
+            if (Type == null)
+                throw new ArgumentException("Invalid collection type specified.", "type");
+            Namespace = type.Namespace;
+        }
 
-		public CollectionType(Type type)
-		{
-			collectionType = type.GetCollectionType();
-			if (collectionType == null)
-				throw new ArgumentException("Invalid collection type specified.", "type");
-			@namespace = type.Namespace;
-		}
+        public override string ToString()
+        {
+            return "Collection(" + Type.Name + "[])";
+        }
 
-		public override string ToString()
-		{
-			return "Collection(" + collectionType.Name + "[])";
-		}
+        public Type Type { get; }
 
-		public Type Type
-		{
-			get { return collectionType; }
-		}
+        public string Name => "";
 
-		public string Name
-		{
-			get { return ""; }
-		}
+        public string Namespace { get; }
 
-		public string Namespace
-		{
-			get { return @namespace; }
-		}
+        public string FullName => Namespace + ".[]";
 
-		public string FullName
-		{
-			get { return @namespace + ".[]"; }
-		}
+        public TypeScriptTypeCode Code => TypeScriptTypeCode.Collection;
 
-		public TypeScriptTypeCode Code
-		{
-			get { return TypeScriptTypeCode.Collection; }
-		}
+        public bool IsRequired => false;
 
-		public bool IsRequired
-		{
-			get { return false; }
-		}
-
-		public Attribute[] CustomAttributes
-		{
-			get { return new Attribute[0]; }
-		}
-	}
+        public Attribute[] CustomAttributes => new Attribute[0];
+    }
 }

@@ -1,65 +1,36 @@
 ﻿using System;
 using NetTypeS.Interfaces;
-using NetTypeS.Utils;
 
 namespace NetTypeS.Types
 {
-	internal sealed class DictionaryType : IDictionaryType
-	{
-		private readonly Type keyType;
-        private readonly Type valueType;
-        private readonly string @namespace;
-
+    internal sealed class DictionaryType : IDictionaryType
+    {
         public DictionaryType(Type keyType, Type valueType)
-		{
-            this.keyType = keyType;
-            this.valueType = valueType;
-			@namespace = valueType.Namespace;
-		}
-
-		public override string ToString()
-		{
-			return "Dictionary(" + keyType.Name + ", " + valueType.Name + ")";
-		}
-
-		public Type KeyType
-		{
-			get { return keyType; }
-		}
-
-        public Type ValueType
         {
-            get { return valueType; }
+            KeyType = keyType;
+            ValueType = valueType;
+            Namespace = valueType.Namespace;
         }
 
-		public string Name
-		{
-			get { return ""; }
-		}
+        public override string ToString()
+        {
+            return "Dictionary(" + KeyType.Name + ", " + ValueType.Name + ")";
+        }
 
-		public string Namespace
-		{
-			get { return @namespace; }
-		}
+        public Type KeyType { get; }
 
-		public string FullName
-		{
-			get { return @namespace + ".[]"; }
-		}
+        public Type ValueType { get; }
 
-		public TypeScriptTypeCode Code
-		{
-			get { return TypeScriptTypeCode.Dictionary; }
-		}
+        public string Name => "";
 
-		public bool IsRequired
-		{
-			get { return false; }
-		}
+        public string Namespace { get; }
 
-		public Attribute[] CustomAttributes
-		{
-			get { return new Attribute[0]; }
-		}
-	}
+        public string FullName => Namespace + ".[]";
+
+        public TypeScriptTypeCode Code => TypeScriptTypeCode.Dictionary;
+
+        public bool IsRequired => false;
+
+        public Attribute[] CustomAttributes => new Attribute[0];
+    }
 }

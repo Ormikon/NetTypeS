@@ -5,44 +5,30 @@ using NetTypeS.Interfaces;
 
 namespace NetTypeS.Types
 {
-	internal class EnumTypeValue : IEnumValue
-	{
-		private readonly string name;
-		private readonly object value;
-		private readonly Lazy<Attribute[]> customAttributes;
+    internal class EnumTypeValue : IEnumValue
+    {
+        private readonly Lazy<Attribute[]> customAttributes;
 
-		public EnumTypeValue(string name, object value, MemberInfo enumMemberInfo)
-		{
-			this.name = name;
-			this.value = value;
-			customAttributes = new Lazy<Attribute[]>(() => enumMemberInfo.GetCustomAttributes<Attribute>().ToArray());
-		}
+        public EnumTypeValue(string name, object value, MemberInfo enumMemberInfo)
+        {
+            Name = name;
+            Value = value;
+            customAttributes = new Lazy<Attribute[]>(() => enumMemberInfo.GetCustomAttributes<Attribute>().ToArray());
+        }
 
-		public long ValueAsInt64()
-		{
-			if (value == null)
-				throw new InvalidOperationException("Enumerable element value is not assigned.");
-			return Convert.ToInt64(value);
-		}
+        public long ValueAsInt64()
+        {
+            if (Value == null)
+                throw new InvalidOperationException("Enumerable element value is not assigned.");
+            return Convert.ToInt64(Value);
+        }
 
-		public string Name
-		{
-			get { return name; }
-		}
+        public string Name { get; }
 
-		public object Value
-		{
-			get { return value; }
-		}
+        public object Value { get; }
 
-		public bool HasValue
-		{
-			get { return value != null; }
-		}
+        public bool HasValue => Value != null;
 
-		public Attribute[] CustomAttributes
-		{
-			get { return customAttributes.Value; }
-		}
-	}
+        public Attribute[] CustomAttributes => customAttributes.Value;
+    }
 }
