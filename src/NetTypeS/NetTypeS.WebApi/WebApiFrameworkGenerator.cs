@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Controllers;
+using System.Web.Http.Description;
 using NetTypeS.Attributes;
 using NetTypeS.WebApi.Extensions;
 using NetTypeS.WebApi.Generators;
@@ -11,13 +9,13 @@ using NetTypeS.WebApi.Models;
 
 namespace NetTypeS.WebApi
 {
-    public class WebApiCoreGenerator
+    public class WebApiFrameworkGenerator
     {
         private readonly string _promiseType;
         private readonly string _apiModuleName;
         private readonly Func<ApiDescription, bool> _apiFilter;
 
-        public WebApiCoreGenerator(
+        public WebApiFrameworkGenerator(
             string promiseType = "Promise",
             string apiModuleName = "apiDefinition",
             Func<ApiDescription, bool> apiFilter = null
@@ -28,12 +26,11 @@ namespace NetTypeS.WebApi
             _apiFilter = apiFilter;
         }
 
-        public GeneratedFiles GenerateAll(IApiDescriptionGroupCollectionProvider explorer, IEnumerable<Type> additionalTypes = null)
+        public GeneratedFiles GenerateAll(IApiExplorer explorer, IEnumerable<Type> additionalTypes = null)
         {
             var webApiGenerator = new WebApiGenerator(_promiseType, _apiModuleName);
-            var apiDescriptions = explorer.ApiDescriptionGroups.Items.SelectMany(x => x.Items)
-                .Where(api => !(api.ActionDescriptor is ControllerActionDescriptor actionDecriptor &&
-                                actionDecriptor.MethodInfo.GetCustomAttributes(typeof(NoTypescriptGenerationAttribute)).Any()))
+            var apiDescriptions = explorer.ApiDescriptions
+                .Where(api => !api.ActionDescriptor.GetCustomAttributes<NoTypescriptGenerationAttribute>().Any())
                 .ToArray();
 
             if (_apiFilter != null)

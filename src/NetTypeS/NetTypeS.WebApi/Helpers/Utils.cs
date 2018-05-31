@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 
-namespace NetTypeS.WebApi
+namespace NetTypeS.WebApi.Helpers
 {
     internal static class Utils
     {

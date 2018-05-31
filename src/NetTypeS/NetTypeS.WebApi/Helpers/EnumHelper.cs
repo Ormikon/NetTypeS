@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace NetTypeS.WebApi
+namespace NetTypeS.WebApi.Helpers
 {
     internal class EnumHelper
     {

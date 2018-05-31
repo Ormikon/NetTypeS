@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NetTypeS.WebApi.ApiModels
+namespace NetTypeS.WebApi.Models
 {
     internal class EndpointInfo
     {

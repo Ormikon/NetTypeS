@@ -2,9 +2,9 @@
 using System.Linq;
 using NetTypeS.Elements.Primitives;
 using NetTypeS.Interfaces;
-using NetTypeS.WebApi.ApiModels;
+using NetTypeS.WebApi.Models;
 
-namespace NetTypeS.WebApi
+namespace NetTypeS.WebApi.Helpers
 {
     internal static class FunctionHelper
     {
@@ -29,26 +29,21 @@ namespace NetTypeS.WebApi
                 method.AddTypeLink(p.GeneratedType);
 
                 if (n != controller.Parameters.Length - 1)
-                {
                     method.AddText(", ");
-                }
             });
 
             method.AddText(")");
 
             method.AddText(" : " + promiseType + "<");
             if (controller.ResponseType != null)
-            {
                 method.AddTypeLink(controller.ResponseType);
-            }
             else
-            {
                 method.AddText("void");
-            }
+
             method.AddText("> ");
 
             var apiCallBlock = Element.New()
-                    .AddText($"return processRequest(")
+                    .AddText("return processRequest(")
                     .AddText("`/" + ReplaceQueryPlaceholders(controller.RelativePath) + "`");
 
             apiCallBlock
@@ -62,7 +57,7 @@ namespace NetTypeS.WebApi
                     .AddText(controller.Parameters.FirstOrDefault(p => !p.IsQuery).GeneratedName);
             }
 
-            apiCallBlock.AddText(")");
+            apiCallBlock.AddText(");");
 
             method.AddBlock(apiCallBlock);
 

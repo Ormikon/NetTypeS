@@ -1,11 +1,12 @@
-﻿using NetTypeS.Utils;
-using NetTypeS.Elements.Primitives;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NetTypeS.WebApi.ApiModels;
+using NetTypeS.Elements.Primitives;
+using NetTypeS.Utils;
+using NetTypeS.WebApi.Helpers;
+using NetTypeS.WebApi.Models;
 
-namespace NetTypeS.WebApi
+namespace NetTypeS.WebApi.Generators
 {
     internal class WebApiGenerator
     {

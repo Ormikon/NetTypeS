@@ -1,4 +1,4 @@
-﻿namespace NetTypeS.WebApi
+﻿namespace NetTypeS.WebApi.Models
 {
     public class GeneratedFiles
     {
