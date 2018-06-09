@@ -12,7 +12,7 @@ namespace NetTypeS
 			where TSType : ITypeScriptType
 		{
 			var tst = collector.Get(type);
-			return tst != null && tst is TSType ? (TSType) tst : default(TSType);
+			return tst is TSType sType ? sType : default(TSType);
 		}
 	}
 }

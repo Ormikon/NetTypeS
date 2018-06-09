@@ -2,8 +2,8 @@
 
 namespace NetTypeS.Interfaces
 {
-	public interface ITypeInfo
-	{
-		bool IsNullable(Type type);
-	}
+    public interface ITypeInfo
+    {
+        bool IsNullable(Type type);
+    }
 }

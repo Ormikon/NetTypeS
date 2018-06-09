@@ -1,76 +1,41 @@
-﻿using NetTypeS;
-using NetTypeS.Utils;
-using NetTypeS.Elements.Primitives;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http.Description;
-using NetTypeS.Interfaces;
-using System.Diagnostics;
-using System.Net.Http;
-using NetTypeS.Attributes;
+using NetTypeS.Elements.Primitives;
+using NetTypeS.Utils;
+using NetTypeS.WebApi.Helpers;
+using NetTypeS.WebApi.Models;
 
 namespace NetTypeS.WebApi
 {
-    public class GeneratedFiles
-    {
-        public string Models { get; set; }
-        public string Api { get; set; }
-    }
-
     public class WebApiGenerator
     {
-        string promiseType;
-        string apiModuleName;
-        Func<ApiDescription, bool> apiFilter;
+        private readonly string _promiseType;
+        private readonly string _apiModuleName;
 
-        public WebApiGenerator(
-            string promiseType = "Promise",
-            string apiModuleName = "apiDefinition",
-            Func<ApiDescription, bool> apiFilter = null
+        public WebApiGenerator(string promiseType = "Promise", string apiModuleName = "apiDefinition"
         )
         {
-            this.promiseType = promiseType;
-            this.apiModuleName = apiModuleName;
-            this.apiFilter = apiFilter;
+            _promiseType = promiseType;
+            _apiModuleName = apiModuleName;
         }
 
-        public GeneratedFiles GenerateAll(
-            IApiExplorer explorer,
-            IEnumerable<Type> additionalTypes = null)
+        public GeneratedFiles GenerateAll(IEnumerable<EndpointInfo> controllers, IEnumerable<Type> additionalTypes)
         {
             var types = Generator.New(new GeneratorSettings { IncludeInheritedTypes = true, GenerateNumberTypeForDictionaryKeys = true });
-
-            var apiDescriptions = explorer.ApiDescriptions
-                .Where(api => !api.ActionDescriptor.GetCustomAttributes<NoTypeScriptGenerationAttrubute>().Any())
-                .AsEnumerable();
-
-            if (this.apiFilter != null)
-            {
-                apiDescriptions = apiDescriptions.Where(a => this.apiFilter(a));
-            };
-
-            var controllers = apiDescriptions.Select(api => new EndpointInfo(api));
             
-            var modelsModule = types.Module("models", m =>
+            types.Module("models", m =>
             {
-                controllers.ForEach(c => c.RegisterTypes(m));
-
-                if (additionalTypes != null)
-                {
-                    additionalTypes.ForEach((t, b) => m.Include(t));
-                }
+                m.Include(controllers.Select(x => x.ResponseType));
+                m.Include(controllers.SelectMany(x => x.Parameters).Select(x => x.GeneratedType));
+                additionalTypes?.ForEach((t, b) => m.Include(t));
 
                 EnumHelper.GenerateEnumNameLookups(m);
             });
 
             var endpointsByController = controllers.ToLookup(c => c.ControllerName);
 
-            var apiModule = types.Module(this.apiModuleName, apiBuilder =>
+            types.Module(_apiModuleName, apiBuilder =>
             {
                 apiBuilder.Import("models", "./models");
 
@@ -89,17 +54,17 @@ namespace NetTypeS.WebApi
                     }
 
                     var contollerElement = Element.New()
-                        .AddText(NetTypeS.Utils.StringUtils.ToCamelCase(controllerEndpointsGroup.Key))
+                        .AddText(StringUtils.ToCamelCase(controllerEndpointsGroup.Key))
                         .AddText(": ");
 
                     var methodsBlockContent = Element.New();
 
                     var controllerEndpoints = controllerEndpointsGroup
                         .GroupBy(e => e.ActionName)
-                        .SelectMany(overloads => RenameOverloads(overloads));
+                        .SelectMany(RenameOverloads);
 
                     controllerEndpoints
-                        .Select(m => m.GenerateFunction(promiseType))
+                        .Select(m => FunctionHelper.GenerateFunction(m, _promiseType))
                         .ForEach((m, n) =>
                         {
                             if (n > 0)
@@ -130,11 +95,11 @@ namespace NetTypeS.WebApi
             return new GeneratedFiles
             {
                 Models = types.GenerateModule("models"),
-                Api = types.GenerateModule(this.apiModuleName)
+                Api = types.GenerateModule(this._apiModuleName)
             };
         }
 
-        IEnumerable<EndpointInfo> RenameOverloads(IEnumerable<EndpointInfo> endpoints)
+        private IEnumerable<EndpointInfo> RenameOverloads(IEnumerable<EndpointInfo> endpoints)
         {
             var needToAppendMethod = endpoints.GroupBy(e => e.HttpMethodName).Count() > 1;
 
