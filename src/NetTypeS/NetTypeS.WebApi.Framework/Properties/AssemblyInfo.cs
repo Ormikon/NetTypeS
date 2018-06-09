@@ -1,12 +1,11 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NetTypeS.WebApi.Framework")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Ormikon.NetTypeS.WebApi.Framework")]
+[assembly: AssemblyDescription("Generates TypeScript definitions from Web.API for .Net Framework")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Ormikon")]
 [assembly: AssemblyProduct("NetTypeS.WebApi.Framework")]
