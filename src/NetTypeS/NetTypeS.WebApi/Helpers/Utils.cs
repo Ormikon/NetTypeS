@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace NetTypeS.WebApi.Helpers
 {
-    internal static class Utils
+    public static class Utils
     {
         public static void ForEach<T>(this IEnumerable<T> collection, Action<T, int> action)
         {

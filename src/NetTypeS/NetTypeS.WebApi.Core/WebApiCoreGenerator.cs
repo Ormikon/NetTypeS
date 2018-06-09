@@ -5,11 +5,10 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using NetTypeS.Attributes;
-using NetTypeS.WebApi.Extensions;
-using NetTypeS.WebApi.Generators;
+using NetTypeS.WebApi.Core.Extensions;
 using NetTypeS.WebApi.Models;
 
-namespace NetTypeS.WebApi
+namespace NetTypeS.WebApi.Core
 {
     public class WebApiCoreGenerator
     {

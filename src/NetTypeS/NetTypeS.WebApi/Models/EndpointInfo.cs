@@ -2,7 +2,7 @@
 
 namespace NetTypeS.WebApi.Models
 {
-    internal class EndpointInfo
+    public class EndpointInfo
     {
         public string ActionName { get; set; }
         public string GeneratedName { get; set; }

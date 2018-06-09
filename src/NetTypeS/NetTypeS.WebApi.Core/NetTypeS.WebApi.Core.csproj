@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NetTypeS\NetTypeS.csproj" />
+    <ProjectReference Include="..\NetTypeS.WebApi\NetTypeS.WebApi.csproj" />
   </ItemGroup>
 
 </Project>

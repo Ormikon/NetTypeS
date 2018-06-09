@@ -2,7 +2,7 @@
 
 namespace NetTypeS.WebApi.Models
 {
-    internal class ParameterInfo
+    public class ParameterInfo
     {
         public string GeneratedName { get; set; }
         public Type GeneratedType { get; set; }

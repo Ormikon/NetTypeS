@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Description;
 using NetTypeS.Attributes;
-using NetTypeS.WebApi.Extensions;
-using NetTypeS.WebApi.Generators;
+using NetTypeS.WebApi.Framework.Extensions;
 using NetTypeS.WebApi.Models;
 
-namespace NetTypeS.WebApi
+namespace NetTypeS.WebApi.Framework
 {
     public class WebApiFrameworkGenerator
     {

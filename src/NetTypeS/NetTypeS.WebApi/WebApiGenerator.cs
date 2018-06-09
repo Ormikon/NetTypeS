@@ -6,9 +6,9 @@ using NetTypeS.Utils;
 using NetTypeS.WebApi.Helpers;
 using NetTypeS.WebApi.Models;
 
-namespace NetTypeS.WebApi.Generators
+namespace NetTypeS.WebApi
 {
-    internal class WebApiGenerator
+    public class WebApiGenerator
     {
         private readonly string _promiseType;
         private readonly string _apiModuleName;
