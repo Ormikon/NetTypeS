@@ -14,5 +14,8 @@
     <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>typescript,ts,javascript,generator</tags>
+    <dependencies>
+      <dependency id="Ormikon.NetTypeS.WebApi" version="2.0.0" />
+    </dependencies>
   </metadata>
 </package>

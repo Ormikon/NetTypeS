@@ -9,6 +9,9 @@
     <PackageProjectUrl>https://github.com/Ormikon/NetTypeS</PackageProjectUrl>
     <PackageIconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</PackageIconUrl>
     <PackageTags>typescript,ts,javascript,generator</PackageTags>
+    <PackageId>Ormikon.NetTypeS.WebApi</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Generates TypeScript definitions from Web.API</Description>
   </PropertyGroup>
 
   <ItemGroup>

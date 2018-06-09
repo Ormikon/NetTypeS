@@ -11,6 +11,8 @@
     <PackageIconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</PackageIconUrl>
     <PackageTags>typescript,ts,javascript,generator</PackageTags>
     <PackageReleaseNotes />
+    <PackageId>Ormikon.NetTypeS</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
