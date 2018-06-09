@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using NetTypeS.FrameworkWebExample;
-using NetTypeS.WebApi;
+using NetTypeS.WebApi.Framework;
 
 namespace NetTypeS.FrameworkExample
 {
