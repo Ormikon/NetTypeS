@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>2.0.0</Version>
+    <Authors>Ormikon</Authors>
+    <Copyright>Copyright Ormikon 2014</Copyright>
+    <PackageLicenseUrl>https://github.com/Ormikon/NetTypeS/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ormikon/NetTypeS</PackageProjectUrl>
+    <PackageIconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</PackageIconUrl>
+    <PackageTags>typescript,ts,javascript,generator</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

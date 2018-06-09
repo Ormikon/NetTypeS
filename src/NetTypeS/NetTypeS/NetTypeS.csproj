@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>2.0.0</Version>
+    <Authors>Ormikon</Authors>
+    <Description>The package with classes for generating TypeScript declarations and code.</Description>
+    <Copyright>Copyright Ormikon 2014</Copyright>
+    <PackageLicenseUrl>https://github.com/Ormikon/NetTypeS/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ormikon/NetTypeS</PackageProjectUrl>
+    <PackageIconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</PackageIconUrl>
+    <PackageTags>typescript,ts,javascript,generator</PackageTags>
+    <PackageReleaseNotes />
   </PropertyGroup>
 
   <ItemGroup>
