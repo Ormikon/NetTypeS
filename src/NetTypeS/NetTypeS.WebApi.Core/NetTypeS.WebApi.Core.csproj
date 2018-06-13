@@ -12,6 +12,7 @@
     <PackageId>Ormikon.NetTypeS.WebApi.Core</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Generates TypeScript definitions from Web.API for .NetCore</Description>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>

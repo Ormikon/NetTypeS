@@ -12,6 +12,7 @@
     <PackageId>Ormikon.NetTypeS.WebApi</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Generates TypeScript definitions from Web.API</Description>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>

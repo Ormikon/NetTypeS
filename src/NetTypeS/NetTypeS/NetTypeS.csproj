@@ -13,6 +13,7 @@
     <PackageReleaseNotes />
     <PackageId>Ormikon.NetTypeS</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>

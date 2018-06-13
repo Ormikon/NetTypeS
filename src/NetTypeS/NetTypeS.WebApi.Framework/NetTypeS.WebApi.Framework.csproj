@@ -14,6 +14,7 @@
     <PackageProjectUrl>https://github.com/Ormikon/NetTypeS</PackageProjectUrl>
     <PackageIconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</PackageIconUrl>
     <PackageTags>typescript,ts,javascript,generator</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.3" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.6" />
   </ItemGroup>
 
   <ItemGroup>
