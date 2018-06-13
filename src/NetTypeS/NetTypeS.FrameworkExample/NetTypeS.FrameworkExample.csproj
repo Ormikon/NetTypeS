@@ -62,7 +62,7 @@
       <Name>NetTypeS.FrameworkWebExample</Name>
     </ProjectReference>
     <ProjectReference Include="..\NetTypeS.WebApi.Framework\NetTypeS.WebApi.Framework.csproj">
-      <Project>{E5257A29-1735-4CEA-BB3A-6B0FF567C020}</Project>
+      <Project>{4042B641-6054-4205-ABFE-94A84FF833E2}</Project>
       <Name>NetTypeS.WebApi.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\NetTypeS.WebApi\NetTypeS.WebApi.csproj">
