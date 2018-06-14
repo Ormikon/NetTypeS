@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ormikon.NetTypeS.WebApi.Framework")]
-[assembly: AssemblyDescription("Generates TypeScript definitions from Web.API for .Net Framework")]
+[assembly: AssemblyTitle("Ormikon.NetTypeS.Console")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Ormikon")]
-[assembly: AssemblyProduct("NetTypeS.WebApi.Framework")]
+[assembly: AssemblyProduct("NetTypeS.Console")]
 [assembly: AssemblyCopyright("Copyright Ormikon 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e5257a29-1735-4cea-bb3a-6b0ff567c020")]
+[assembly: Guid("259079f4-3e39-492a-b3d4-a420536219ca")]
 
 // Version information for an assembly consists of the following four values:
 //
