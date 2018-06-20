@@ -40,7 +40,7 @@ namespace NetTypeS.WebApi
                 apiBuilder.Import("models", "./models");
 
                 var wrapperFunction = Element.New();
-                wrapperFunction.AddText("export function getApi(processRequest: (path: string, method: string, data?: any) => Promise<any>) {");
+                wrapperFunction.AddText($"export function getApi(processRequest: (path: string, method: string, data?: any) => {_promiseType}<any>) {{");
                 wrapperFunction.AddLine();
 
                 var apiDefinitionObject = Element.New();
