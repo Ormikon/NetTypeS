@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NetTypeS.ExampleData.Models;
 
@@ -62,6 +63,24 @@ namespace NetTypeS.CoreWebExample.Controllers
         public async Task<int> GetExampleSystemAsync([FromBody] ExampleSimpleItem request)
         {
             return await new Task<int>(() => 1);
+        }
+
+        [HttpPost]
+        public async Task<int[]> GetExampleSystemArrayAsync([FromBody] ExampleSimpleItem request)
+        {
+            return await new Task<int[]>(() => new int[0]);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage GetExampleResponseMessage([FromBody] HttpRequestMessage request)
+        {
+            return new HttpResponseMessage();
+        }
+
+        [HttpPost]
+        public async Task<HttpResponseMessage> GetExampleResponseMessageAsync([FromBody] HttpRequestMessage request)
+        {
+            return await new Task<HttpResponseMessage>(() => new HttpResponseMessage());
         }
     }
 }
