@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.1.2</Version>
+    <Version>2.1.3</Version>
     <Authors>Ormikon</Authors>
     <Copyright>Copyright Ormikon 2014</Copyright>
     <PackageLicenseUrl>https://github.com/Ormikon/NetTypeS/blob/master/LICENSE</PackageLicenseUrl>
@@ -13,7 +13,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Generates TypeScript definitions from Web.API for .NetCore</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Fixed generate api with response type Task, Task&lt;&gt;</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed generate api with response type Task, Task&lt;&gt;, with system generic argument</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

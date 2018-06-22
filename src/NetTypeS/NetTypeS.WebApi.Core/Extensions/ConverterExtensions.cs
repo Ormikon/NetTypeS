@@ -18,7 +18,7 @@ namespace NetTypeS.WebApi.Core.Extensions
                 ControllerName = controllerDescriptor?.ControllerName,
                 HttpMethodName = apiDescription.HttpMethod,
                 RelativePath = apiDescription.RelativePath,
-                ResponseType = Helpers.Utils.ReplaceUnsupportedTypesWithAny(
+                ResponseType = Helpers.Utils.ReplaceUnsupportedTypes(
                     apiDescription.SupportedResponseTypes.SingleOrDefault()?.Type ?? controllerDescriptor?.MethodInfo.ReturnType),
                 Parameters = apiDescription.ParameterDescriptions.Select(x => x.ToParameterInfo()).ToArray()
             };
@@ -28,7 +28,7 @@ namespace NetTypeS.WebApi.Core.Extensions
             new ParameterInfo
             {
                 GeneratedName = Utils.StringUtils.ToCamelCase(parameter.Name),
-                GeneratedType = Helpers.Utils.ReplaceUnsupportedTypesWithAny(parameter.Type),
+                GeneratedType = Helpers.Utils.ReplaceUnsupportedTypes(parameter.Type),
                 IsQuery = parameter.Type.GetCustomAttributes(typeof(FromQueryAttribute), true).Any()
             };
     }

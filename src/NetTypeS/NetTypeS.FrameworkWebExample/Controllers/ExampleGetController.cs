@@ -48,5 +48,17 @@ namespace NetTypeS.FrameworkWebExample.Controllers
         public async Task ExampleAsync()
         {
         }
+
+        [HttpGet]
+        public async Task<object> GetExampleObjectAsync(int id)
+        {
+            return await new Task<object>(() => new object());
+        }
+
+        [HttpGet]
+        public async Task<int> GetExampleSystemAsync(int id)
+        {
+            return await new Task<int>(() => 2);
+        }
     }
 }
