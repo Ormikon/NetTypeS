@@ -9,26 +9,26 @@ namespace NetTypeS
 {
     internal class TypeElementBuilder : ITypeElementBuilder
     {
-        private readonly string moduleName;
-        private readonly ITypeCollector collector;
-        private readonly ICustomTypeNameHolder customNameHolder;
-        private readonly IGeneratorSettings settings;
+        private readonly string _moduleName;
+        private readonly ITypeCollector _collector;
+        private readonly ICustomTypeNameHolder _customNameHolder;
+        private readonly IGeneratorSettings _settings;
 
         public TypeElementBuilder(string moduleName, ITypeCollector collector,
             ICustomTypeNameHolder customTypeNameHolder, IGeneratorSettings settings)
         {
-            this.moduleName = moduleName ?? "";
-            this.collector = collector;
-            customNameHolder = customTypeNameHolder;
-            this.settings = settings;
+            _moduleName = moduleName ?? "";
+            _collector = collector;
+            _customNameHolder = customTypeNameHolder;
+            _settings = settings;
         }
 
         private ITypeScriptElement GetCustomOrAnyNameElement(Type type = null, ITypeScriptType tsType = null)
         {
             if (type == null)
-                return new TypeNameElement(settings.TypeNameResolver(SimpleType.Any));
-            string name = customNameHolder.GetNameFor(type);
-            return new TypeNameElement(name ?? settings.TypeNameResolver(tsType ?? SimpleType.Any));
+                return new TypeNameElement(_settings.TypeNameResolver(SimpleType.Any));
+            string name = _customNameHolder.GetNameFor(type);
+            return new TypeNameElement(name ?? _settings.TypeNameResolver(tsType ?? SimpleType.Any));
         }
 
         private ITypeScriptElement GetComplexTypeElement(IComplexType ct)
@@ -36,18 +36,18 @@ namespace NetTypeS
             string name;
             if (!ct.IsGeneric)
             {
-                name = customNameHolder.GetNameFor(ct.Type) ?? settings.TypeNameResolver(ct);
+                name = _customNameHolder.GetNameFor(ct.Type) ?? _settings.TypeNameResolver(ct);
                 return new InterfaceNameElement(name);
             }
-            name = customNameHolder.GetNameFor(ct.IsGenericDefinition ? ct.Type : ct.GenericType);
+            name = _customNameHolder.GetNameFor(ct.IsGenericDefinition ? ct.Type : ct.GenericType);
             if (string.IsNullOrEmpty(name))
             {
                 if (ct.IsGenericDefinition)
-                    name = settings.TypeNameResolver(ct);
+                    name = _settings.TypeNameResolver(ct);
                 else
                 {
-                    var gct = collector.Get(ct.GenericType);
-                    name = settings.TypeNameResolver(gct);
+                    var gct = _collector.Get(ct.GenericType);
+                    name = _settings.TypeNameResolver(gct);
                 }
             }
 
@@ -68,17 +68,17 @@ namespace NetTypeS
         {
             if (type == null)
                 return GetCustomOrAnyNameElement();
-            var tst = collector.Get(type);
+            var tst = _collector.Get(type);
             if (tst == null)
             {
                 // Auto generate name for constructed generic if collected
                 if (type.IsGenericType && type.IsConstructedGenericType)
                 {
-                    tst = collector.Get(type.GetGenericTypeDefinition());
+                    var genericTypeDefenition = type.GetGenericTypeDefinition();
+                    tst = _collector.Get(genericTypeDefenition);
+
                     if (tst != null && tst.Code == TypeScriptTypeCode.Complex)
-                    {
                         return GetComplexTypeElement(new ComplexType(type));
-                    }
                 }
                 else if (type.IsNullable())
                     return GetTypeNameElement(Nullable.GetUnderlyingType(type));
@@ -99,8 +99,8 @@ namespace NetTypeS
                     new TextElement(" }"));
             if (tst.Code == TypeScriptTypeCode.Enum)
             {
-                string customName = customNameHolder.GetNameFor(type);
-                return new EnumNameElement(customName ?? settings.TypeNameResolver(tst));
+                string customName = _customNameHolder.GetNameFor(type);
+                return new EnumNameElement(customName ?? _settings.TypeNameResolver(tst));
             }
             if (tst.Code == TypeScriptTypeCode.Complex)
             {
@@ -114,13 +114,13 @@ namespace NetTypeS
             if (moduleBinding == null)
                 moduleBinding = "";
             // If the same module or parent
-            if (moduleBinding.Equals(moduleName, StringComparison.Ordinal) ||
-                moduleName.StartsWith(moduleBinding + ".", StringComparison.Ordinal))
+            if (moduleBinding.Equals(_moduleName, StringComparison.Ordinal) ||
+                _moduleName.StartsWith(moduleBinding + ".", StringComparison.Ordinal))
                 return "";
             // If child
-            if (!string.IsNullOrEmpty(moduleName) && moduleBinding.StartsWith(moduleName + ".", StringComparison.Ordinal))
+            if (!string.IsNullOrEmpty(_moduleName) && moduleBinding.StartsWith(_moduleName + ".", StringComparison.Ordinal))
             {
-                var prefix = moduleBinding.Substring(moduleName.Length + 1);
+                var prefix = moduleBinding.Substring(_moduleName.Length + 1);
                 return prefix;
             }
             // Full path
@@ -131,16 +131,16 @@ namespace NetTypeS
         {
             if (type == null)
                 return null;
-            var tst = collector.Get(type);
+            var tst = _collector.Get(type);
             if (tst == null)
             {
                 // Auto generate name for constructed generic if collected
                 if (type.IsGenericType && type.IsConstructedGenericType)
-                {
                     return GetTypeModuleElement(type.GetGenericTypeDefinition());
-                }
+
                 if (type.IsNullable())
                     return GetTypeModuleElement(Nullable.GetUnderlyingType(type));
+
                 return null;
             }
             if (tst.Code == TypeScriptTypeCode.Nullable)
@@ -160,12 +160,12 @@ namespace NetTypeS
                 if (ct.IsGeneric && !ct.IsGenericDefinition)
                 {
                     type = ct.GenericType;
-                    tst = collector.Get(type);
+                    tst = _collector.Get(type);
                 }
             }
             if (tst.Code == TypeScriptTypeCode.Enum || tst.Code == TypeScriptTypeCode.Complex)
             {
-                var binding = collector.GetModuleBinding(type);
+                var binding = _collector.GetModuleBinding(type);
                 var link = GetModuleLink(binding);
                 return string.IsNullOrEmpty(link) ? null : new ModuleNameElement(link);
             }
