@@ -22,19 +22,19 @@ namespace NetTypeS
             public string ModuleBinding { get; set; }
         }
 
-        private readonly IInheritedTypeSpy inheritedTypeSpy;
-        private readonly bool includeInheritedTypes;
-        private readonly bool generateNumberTypeForDictionaryKeys;
-        private readonly ISet<TypeMutator> mutators = new HashSet<TypeMutator>();
-        private readonly IDictionary<Type, CollectedTypeInfo> collected = new Dictionary<Type, CollectedTypeInfo>();
+        private readonly IInheritedTypeSpy _inheritedTypeSpy;
+        private readonly bool _includeInheritedTypes;
+        private readonly bool _generateNumberTypeForDictionaryKeys;
+        private readonly ISet<TypeMutator> _mutators = new HashSet<TypeMutator>();
+        private readonly IDictionary<Type, CollectedTypeInfo> _collected = new Dictionary<Type, CollectedTypeInfo>();
 
         public TypeCollector(IInheritedTypeSpy inheritedTypeSpy = null,
             bool includeInherited = false,
             bool generateNumberTypeForDictionaryKeys = false)
         {
-            this.inheritedTypeSpy = inheritedTypeSpy;
-            includeInheritedTypes = includeInherited;
-            this.generateNumberTypeForDictionaryKeys = generateNumberTypeForDictionaryKeys;
+            _inheritedTypeSpy = inheritedTypeSpy;
+            _includeInheritedTypes = includeInherited;
+            _generateNumberTypeForDictionaryKeys = generateNumberTypeForDictionaryKeys;
             RegisterSimpleTypes();
             // Add replacement for basic types
             foreach (var kv in TypeUtils.KnownTypes)
@@ -65,7 +65,7 @@ namespace NetTypeS
 
         public void Collect(Type type, string moduleBinding, bool overrideBindingIfExists = true)
         {
-            Collect(type, includeInheritedTypes, moduleBinding, overrideBindingIfExists);
+            Collect(type, _includeInheritedTypes, moduleBinding, overrideBindingIfExists);
         }
 
         public void Collect(Type type, bool includeInherited, string moduleBinding, bool overrideBindingIfExists = true)
@@ -75,13 +75,13 @@ namespace NetTypeS
                 return;
 
             type.ThrowIfUnsupported();
-            if (collected.ContainsKey(type))
+            if (_collected.ContainsKey(type))
             {
                 if (overrideBindingIfExists)
                 {
-                    var cti = collected[type];
+                    var cti = _collected[type];
                     if (cti.Type.Code == TypeScriptTypeCode.Nullable)
-                        cti = collected[((NullableType)cti.Type).UnderlyingType];
+                        cti = _collected[((NullableType)cti.Type).UnderlyingType];
                     if (cti.Type.Code == TypeScriptTypeCode.Complex || cti.Type.Code == TypeScriptTypeCode.Enum)
                     {
                         cti.ModuleBinding = moduleBinding;
@@ -93,7 +93,7 @@ namespace NetTypeS
             // Generic arguments in most cases cannot be mutated
             if (type.IsGenericParameter)
             {
-                collected.Add(type, new CollectedTypeInfo(SimpleType.Create(type)));
+                _collected.Add(type, new CollectedTypeInfo(SimpleType.Create(type)));
                 return;
             }
 
@@ -103,33 +103,37 @@ namespace NetTypeS
             if (type.IsNullable())
             {
                 var nut = Nullable.GetUnderlyingType(type);
-                collected.Add(type, new CollectedTypeInfo(new NullableType(nut)));
+                _collected.Add(type, new CollectedTypeInfo(new NullableType(nut)));
                 // The same method parameters if nullable
                 Collect(nut, includeInherited, moduleBinding, overrideBindingIfExists);
                 return;
             }
 
             if (type.IsEnum())
-                collected.Add(type, new CollectedTypeInfo(new EnumType(type), moduleBinding));
+            {
+                _collected.Add(type, new CollectedTypeInfo(new EnumType(type), moduleBinding));
+            }
             else if (type.IsSimple())
-                collected.Add(type, new CollectedTypeInfo(SimpleType.Create(type)));
+            {
+                _collected.Add(type, new CollectedTypeInfo(SimpleType.Create(type)));
+            }
             else if (type.IsCollection())
             {
                 if (type.IsDictionary())
                 {
                     var dictTypeParams = type.GetDictionaryTypes();
                     var keyType = dictTypeParams[0];
-                    Type tsKeyType = (keyType.IsNumber() && generateNumberTypeForDictionaryKeys)
+                    Type tsKeyType = (keyType.IsNumber() && _generateNumberTypeForDictionaryKeys)
                         ? typeof(int)
                         : typeof(string);
                     var dt = new DictionaryType(tsKeyType, dictTypeParams[1]);
-                    collected.Add(type, new CollectedTypeInfo(dt));
+                    _collected.Add(type, new CollectedTypeInfo(dt));
                     Collect(dt.ValueType, includeInherited, moduleBinding, false);
                 }
                 else
                 {
                     var ct = new CollectionType(type);
-                    collected.Add(type, new CollectedTypeInfo(ct));
+                    _collected.Add(type, new CollectedTypeInfo(ct));
                     Collect(ct.Type, includeInherited, moduleBinding, false);
                 }
             }
@@ -142,7 +146,7 @@ namespace NetTypeS
         private void CollectNonGenericComplex(IComplexType type, bool includeInherited, string moduleBinding,
             bool overrideBindingIfExists)
         {
-            collected.Add(type.Type, new CollectedTypeInfo(type, moduleBinding));
+            _collected.Add(type.Type, new CollectedTypeInfo(type, moduleBinding));
             if (type.IsInterface)
                 foreach (var @interface in type.Interfaces)
                 {
@@ -162,9 +166,7 @@ namespace NetTypeS
                 if (type.IsConstructedGenericType)
                 {
                     foreach (var genericArg in type.GenericTypeArguments)
-                    {
                         Collect(genericArg, includeInherited, moduleBinding, overrideBindingIfExists);
-                    }
 
                     Collect(type.GetGenericTypeDefinition(), includeInherited, moduleBinding, overrideBindingIfExists);
                 }
@@ -183,9 +185,9 @@ namespace NetTypeS
                 var ct = new ComplexType(type);
                 CollectNonGenericComplex(ct, includeInherited, moduleBinding, overrideBindingIfExists);
             }
-            if (includeInherited && inheritedTypeSpy != null)
+            if (includeInherited && _inheritedTypeSpy != null)
             {
-                foreach (var inheritedType in inheritedTypeSpy.GetInheritedTypes(type))
+                foreach (var inheritedType in _inheritedTypeSpy.GetInheritedTypes(type))
                 {
                     Collect(inheritedType, true, moduleBinding, overrideBindingIfExists);
                 }
@@ -199,20 +201,20 @@ namespace NetTypeS
             if (TryMutate(type, out mutated))
             {
                 // Save reference before next collect to prevent circular mutations
-                collected.Add(type, null);
+                _collected.Add(type, null);
                 // Do not override binding for mutated types
                 Collect(mutated, moduleBinding, false);
                 var cti = GetInfo(mutated);
                 if (cti == null)
                 {
-                    collected.Remove(type);
+                    _collected.Remove(type);
                     throw new InvalidOperationException(
                         "Unable to collect information about " + type.FullName +
                         " type. Some of type replacements replace type with the same type and " +
                         " it makes circular replacement references. Please check the code of registered" +
                         " Replace delegates and remove circular type replacement.");
                 }
-                collected[type] = cti;
+                _collected[type] = cti;
                 return true;
             }
 
@@ -222,7 +224,7 @@ namespace NetTypeS
         private bool TryMutate(Type type, out Type replacement)
         {
             replacement = null;
-            foreach (var mutator in mutators)
+            foreach (var mutator in _mutators)
             {
                 if (mutator.TryMutate(type, out replacement))
                     return true;
@@ -244,7 +246,7 @@ namespace NetTypeS
             if (cti == null)
                 Collect(withType, "", false);
             cti = GetInfo(withType);
-            collected[type] = cti ?? throw new InvalidOperationException("For some reason it is unable to collect information for type " + withType.FullName);
+            _collected[type] = cti ?? throw new InvalidOperationException("For some reason it is unable to collect information for type " + withType.FullName);
         }
 
         public void Replace(Func<Type, bool> test, Type withType)
@@ -255,12 +257,12 @@ namespace NetTypeS
                 throw new ArgumentNullException("withType");
 
             var mutator = new TypeMutator(test, withType);
-            if (mutators.Contains(mutator))
+            if (_mutators.Contains(mutator))
                 return;
 
-            mutators.Add(mutator);
+            _mutators.Add(mutator);
 
-            var c = collected.Keys.ToArray();
+            var c = _collected.Keys.ToArray();
             foreach (var type in c)
             {
                 Type newType;
@@ -270,7 +272,7 @@ namespace NetTypeS
                     if (cti == null)
                         Collect(newType, "", false);
                     cti = GetInfo(newType);
-                    collected[type] = cti ?? throw new InvalidOperationException("For some reason it is unable to collect information for type " + withType.FullName);
+                    _collected[type] = cti ?? throw new InvalidOperationException("For some reason it is unable to collect information for type " + withType.FullName);
                 }
             }
         }
@@ -279,7 +281,7 @@ namespace NetTypeS
         {
             if (type == null)
                 return null;
-            return collected.TryGetValue(type, out var cti) ? cti : null;
+            return _collected.TryGetValue(type, out var cti) ? cti : null;
         }
 
         public ITypeScriptType Get(Type type)
@@ -333,14 +335,14 @@ namespace NetTypeS
 
         public IEnumerable<ITypeScriptType> GetTypes(string module)
         {
-            return collected.Values
+            return _collected.Values
                 .Distinct()
                 .Where(cti => CompareModuleBindings(cti.ModuleBinding, module))
                 .Select(cti => cti.Type);
         }
 
-        public IEnumerable<ITypeScriptType> Collected => collected.Values.Select(cti => cti.Type);
+        public IEnumerable<ITypeScriptType> Collected => _collected.Values.Select(cti => cti.Type);
 
-        public IEnumerable<Type> CollectedTypes => collected.Keys;
+        public IEnumerable<Type> CollectedTypes => _collected.Keys;
     }
 }

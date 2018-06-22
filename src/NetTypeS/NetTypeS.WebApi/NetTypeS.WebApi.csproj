@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.1.1</Version>
+    <Version>2.1.2</Version>
     <Authors>Ormikon</Authors>
     <Copyright>Copyright Ormikon 2014</Copyright>
     <PackageLicenseUrl>https://github.com/Ormikon/NetTypeS/blob/master/LICENSE</PackageLicenseUrl>

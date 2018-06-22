@@ -95,7 +95,7 @@ namespace NetTypeS.WebApi
             return new GeneratedFiles
             {
                 Models = types.GenerateModule("models"),
-                Api = types.GenerateModule(this._apiModuleName)
+                Api = types.GenerateModule(_apiModuleName)
             };
         }
 

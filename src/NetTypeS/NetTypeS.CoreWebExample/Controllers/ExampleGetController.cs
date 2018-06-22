@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using NetTypeS.ExampleData.Models;
 
 namespace NetTypeS.CoreWebExample.Controllers
@@ -36,6 +37,18 @@ namespace NetTypeS.CoreWebExample.Controllers
         public ExampleGenericItem<ExampleComplexItem> GetExampleGenericItem()
         {
             return new ExampleGenericItem<ExampleComplexItem>();
+        }
+
+        [HttpGet]
+        public async Task<ExampleComplexItem> GetExampleComplexItemAsync(int id)
+        {
+            var result = new Task<ExampleComplexItem>(() => new ExampleComplexItem());
+            return await result;
+        }
+
+        [HttpGet]
+        public async Task ExampleAsync()
+        {
         }
     }
 }
