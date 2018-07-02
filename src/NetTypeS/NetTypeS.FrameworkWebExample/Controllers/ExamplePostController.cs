@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using NetTypeS.ExampleData.Models;
 
@@ -59,6 +60,24 @@ namespace NetTypeS.FrameworkWebExample.Controllers
         public async Task<int> GetExampleSystemAsync(ExampleSimpleItem request)
         {
             return await new Task<int>(() => 1);
+        }
+
+        [HttpPost]
+        public async Task<int[]> GetExampleSystemArrayAsync(ExampleSimpleItem request)
+        {
+            return await new Task<int[]>(() => new int[0]);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage GetExampleResponseMessage(HttpRequestMessage request)
+        {
+            return new HttpResponseMessage();
+        }
+
+        [HttpPost]
+        public async Task<HttpResponseMessage> GetExampleResponseMessageAsync(HttpRequestMessage request)
+        {
+            return await new Task<HttpResponseMessage>(() => new HttpResponseMessage());
         }
     }
 }
