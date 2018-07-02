@@ -1,16 +1,23 @@
 NetTypeS
 ========
 
-The package with classes for generating TypeScript declarations and code for .Net Framework and .Net Core
+The packages with classes for generating TypeScript declarations and code by WebApi for .Net Core and .Net Framework.
 
 # Installation
 
 Download and install the package from NuGet:
 
  * [.Net Core generator](https://www.nuget.org/packages/Ormikon.NetTypeS.WebApi.Core):
+
+```powershell
     Install-Package Ormikon.NetTypeS.WebApi.Core
+```
+
  * [.Net Framework generator](https://www.nuget.org/packages/Ormikon.NetTypeS.WebApi.Framework):
+
+```powershell
     Install-Package Ormikon.NetTypeS.WebApi.Framework
+```
 
 The following targets are available:
 
@@ -49,8 +56,13 @@ class Program
 ```
 
 # Examples
-[.Net Core Examples](https://github.com/Ormikon/NetTypeS/tree/master/src/NetTypeS/NetTypeS.CoreExample)
-[.Net Core Api Implementation](https://github.com/Ormikon/NetTypeS/tree/master/src/NetTypeS/NetTypeS.CoreWebExample)
 
-[.Net Framework Examples](https://github.com/Ormikon/NetTypeS/tree/master/src/NetTypeS/NetTypeS.FrameworkExample)
-[.Net Framework Api Implementation](https://github.com/Ormikon/NetTypeS/tree/master/src/NetTypeS/NetTypeS.FrameworkWebExample)
+.Net Core:
+
+ * [.Net Core Examples](https://github.com/Ormikon/NetTypeS/tree/master/src/NetTypeS/NetTypeS.CoreExample);
+ * [.Net Core WebApi Implementation](https://github.com/Ormikon/NetTypeS/tree/master/src/NetTypeS/NetTypeS.CoreWebExample);
+
+.Net Framework:
+
+ * [.Net Framework Examples](https://github.com/Ormikon/NetTypeS/tree/master/src/NetTypeS/NetTypeS.FrameworkExample);
+ * [.Net Framework WebApi Implementation](https://github.com/Ormikon/NetTypeS/tree/master/src/NetTypeS/NetTypeS.FrameworkWebExample);
