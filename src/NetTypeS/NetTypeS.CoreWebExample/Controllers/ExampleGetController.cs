@@ -8,6 +8,7 @@ namespace NetTypeS.CoreWebExample.Controllers
     [Produces("application/json")]
     [Route("api/ExampleGet")]
     [ApiExplorerSettings(IgnoreApi = false, GroupName = nameof(ExampleGetController))]
+    [ApiController]
     public class ExampleGetController : Controller
     {
         [HttpGet]
@@ -80,6 +81,12 @@ namespace NetTypeS.CoreWebExample.Controllers
         public async Task<HttpResponseMessage> GetExampleResponseMeassageAsync(int id)
         {
             return await new Task<HttpResponseMessage>(() => new HttpResponseMessage());
+        }
+
+        [HttpGet]
+        public int GetExampleTwoGetParameters([FromQuery]int limit, [FromQuery]int skip = 0)
+        {
+            return 0;
         }
     }
 }
