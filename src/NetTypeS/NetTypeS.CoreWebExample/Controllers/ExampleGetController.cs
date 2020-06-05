@@ -30,7 +30,8 @@ namespace NetTypeS.CoreWebExample.Controllers
         }
 
         [HttpGet]
-        public ExampleComplexItem GetExampleComplexItemParameter(int id)
+        [Route("complex/path/{pathParam}/and/{anotherPathParam}")]
+        public ExampleComplexItem GetExampleComplexItemParameter(int pathParam, string fromQuery1, string anotherPathParam, string fromQuery2)
         {
             return new ExampleComplexItem();
         }

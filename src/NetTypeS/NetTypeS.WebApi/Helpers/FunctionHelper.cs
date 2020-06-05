@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using NetTypeS.Elements.Primitives;
 using NetTypeS.Interfaces;
 using NetTypeS.WebApi.Models;
@@ -45,7 +44,7 @@ namespace NetTypeS.WebApi.Helpers
 
             var apiCallBlock = Element.New()
                     .AddText("return processRequest(")
-                    .AddText("`/" + GetQueryParamsPlaceholders(controller) + "`");
+                    .AddText("`/" + ReplaceQueryPlaceholders(controller.RelativePath) + "`");
 
             apiCallBlock
                 .AddText(", ")
@@ -65,29 +64,9 @@ namespace NetTypeS.WebApi.Helpers
             return method;
         }
 
-        private static string GetQueryParamsPlaceholders(EndpointInfo controller)
+        private static string ReplaceQueryPlaceholders(string url)
         {
-            if (!controller.Parameters.Any(p => p.IsQuery))
-            {
-                return controller.RelativePath;
-            }
-            else if (controller.RelativePath.Contains("{")) // .NET Framework adds placeholdes itself, just escape them differently
-            {
-                return controller.RelativePath.Replace("{", "${");
-            }
-            else
-            {
-                var sb = new StringBuilder(controller.RelativePath);
-                sb.Append("?");
-
-                foreach (var parameter in controller.Parameters.Where(p => p.IsQuery))
-                {
-                    sb.Append(parameter.GeneratedName).Append("={").Append(parameter.GeneratedName).Append("}&");
-                }
-                sb.Remove(sb.Length - 1, 1);
-
-                return sb.ToString();
-            }            
+            return url.Replace("{", "${");
         }
     }
 }

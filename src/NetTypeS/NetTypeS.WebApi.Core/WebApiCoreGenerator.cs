@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NetTypeS.Attributes;
 using NetTypeS.WebApi.Core.Extensions;
 using NetTypeS.WebApi.Models;
@@ -29,7 +31,10 @@ namespace NetTypeS.WebApi.Core
 
         public GeneratedFiles GenerateAll(IApiDescriptionGroupCollectionProvider explorer, IEnumerable<Type> additionalTypes = null)
         {
+            UpdateRelativePath(explorer);
+
             var webApiGenerator = new WebApiGenerator(_promiseType, _apiModuleName);
+
             var apiDescriptions = explorer.ApiDescriptionGroups.Items.SelectMany(x => x.Items)
                 .Where(api => !(api.ActionDescriptor is ControllerActionDescriptor actionDecriptor &&
                                 actionDecriptor.MethodInfo.GetCustomAttributes(typeof(NoTypescriptGenerationAttribute)).Any()))
@@ -41,6 +46,27 @@ namespace NetTypeS.WebApi.Core
             var endpoints = apiDescriptions.Select(x => x.ToEndpointInfo()).ToArray();
 
             return webApiGenerator.GenerateAll(endpoints, additionalTypes);
+        }
+
+        // Append query string param placeholdes to match ASP.NET WebAPI behavior (.NET Core omits them)
+        private void UpdateRelativePath(IApiDescriptionGroupCollectionProvider apiExplorer)
+        {
+            var apiItems = apiExplorer.ApiDescriptionGroups.Items.SelectMany(x => x.Items);
+
+            foreach (var api in apiItems)
+            {
+                if (api.ParameterDescriptions.Any(x => x.Source == BindingSource.Query))
+                {
+                    var sb = new StringBuilder("?");
+                    foreach (var parameter in api.ParameterDescriptions.Where(x => x.Source == BindingSource.Query))
+                    {
+                        sb.Append(parameter.Name).Append("={").Append(parameter.Name).Append("}&");
+                    }
+                    sb.Remove(sb.Length - 1, 1);
+
+                    api.RelativePath += sb.ToString();
+                }
+            }
         }
     }
 }
