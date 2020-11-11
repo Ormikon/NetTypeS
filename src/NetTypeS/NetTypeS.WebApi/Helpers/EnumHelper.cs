@@ -14,7 +14,7 @@ namespace NetTypeS.WebApi.Helpers
         {
             m.ForEnums(et =>
                 Element.New()
-                    .AddText("export var ")
+                    .AddText("export const ")
                     .AddText(NetTypeS.Utils.StringUtils.ToCamelCase(et.Name))
                     .AddText("Names = ")
                     .AddBlock(et.Values.Select((ev, i) =>
