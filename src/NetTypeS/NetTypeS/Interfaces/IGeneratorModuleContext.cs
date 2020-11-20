@@ -39,5 +39,10 @@
         /// Is all the interface properties should be optional
         /// </summary>
         bool AllPropertiesAreOptional { get; }
+
+        /// <summary>
+        /// Optional properties style (nullable or underfiend)
+        /// </summary>
+        OptionalPropertiesStyle OptionalPropertiesStyle { get; }
     }
 }

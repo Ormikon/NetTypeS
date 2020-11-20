@@ -13,21 +13,24 @@ namespace NetTypeS.WebApi.Framework
         private readonly string _promiseType;
         private readonly string _apiModuleName;
         private readonly Func<ApiDescription, bool> _apiFilter;
+        private readonly Action<GeneratorSettings> _setupSettings;
 
         public WebApiFrameworkGenerator(
             string promiseType = "Promise",
             string apiModuleName = "apiDefinition",
-            Func<ApiDescription, bool> apiFilter = null
+            Func<ApiDescription, bool> apiFilter = null,
+            Action<GeneratorSettings> setupSettings = null
         )
         {
             _promiseType = promiseType;
             _apiModuleName = apiModuleName;
             _apiFilter = apiFilter;
+            _setupSettings = setupSettings;
         }
 
         public GeneratedFiles GenerateAll(IApiExplorer explorer, IEnumerable<Type> additionalTypes = null)
         {
-            var webApiGenerator = new WebApiGenerator(_promiseType, _apiModuleName);
+            var webApiGenerator = new WebApiGenerator(_promiseType, _apiModuleName, _setupSettings);
             var apiDescriptions = explorer.ApiDescriptions
                 .Where(api => !api.ActionDescriptor.GetCustomAttributes<NoTypescriptGenerationAttribute>().Any())
                 .ToArray();

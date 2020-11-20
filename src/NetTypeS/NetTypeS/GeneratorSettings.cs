@@ -66,6 +66,8 @@ namespace NetTypeS
 
         public bool AllPropertiesAreOptional { get; set; }
 
+        public OptionalPropertiesStyle OptionalPropertiesStyle { get; set; }
+
         #endregion
 
         #region Inherited types
@@ -79,6 +81,8 @@ namespace NetTypeS
         public bool GenerateNumberTypeForDictionaryKeys { get; set; }
 
         #endregion
+
+        public bool QueryParametersAsObject { get; set; }
 
         /// <summary>
         /// Clone settings
@@ -97,8 +101,10 @@ namespace NetTypeS
                 PropertyNameFormatter = PropertyNameFormatter ?? Default.PropertyNameFormatter,
                 PropertyFilter = PropertyFilter ?? Default.PropertyFilter,
                 AllPropertiesAreOptional = AllPropertiesAreOptional,
+                OptionalPropertiesStyle = OptionalPropertiesStyle,
                 IncludeInheritedTypes = IncludeInheritedTypes,
-                GenerateNumberTypeForDictionaryKeys = GenerateNumberTypeForDictionaryKeys
+                GenerateNumberTypeForDictionaryKeys = GenerateNumberTypeForDictionaryKeys,
+                QueryParametersAsObject = QueryParametersAsObject,
             };
             foreach (var assembly in InheritedTypeAssemblies)
             {

@@ -69,6 +69,10 @@
       <Project>{7b9732c9-a825-484d-b0f4-03cd192f616f}</Project>
       <Name>NetTypeS.WebApi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NetTypeS\NetTypeS.csproj">
+      <Project>{EB212F38-2625-4363-997F-1F22AEC236F7}</Project>
+      <Name>NetTypeS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -22,18 +23,18 @@ namespace NetTypeS.WebApi.Core.Extensions
                 RelativePath = apiDescription.RelativePath,
                 ResponseType = Helpers.UtilsCore.ReplaceUnsupportedTypes(
                     apiDescription.SupportedResponseTypes.SingleOrDefault()?.Type ?? controllerDescriptor?.MethodInfo.ReturnType),
-                Parameters = apiDescription.ParameterDescriptions.Select(x => x.ToParameterInfo()).ToArray()
+                Parameters = apiDescription.ActionDescriptor.Parameters.Select(x => x.ToParameterInfo()).ToArray()
             };
         }
 
-        public static ParameterInfo ToParameterInfo(this ApiParameterDescription parameter) =>
+        public static ParameterInfo ToParameterInfo(this ParameterDescriptor parameter) =>
             new ParameterInfo
             {
                 GeneratedName = Utils.StringUtils.ToCamelCase(parameter.Name),
-                GeneratedType = Helpers.UtilsCore.ReplaceUnsupportedTypes(parameter.Type),
-                IsQuery = parameter.Type.GetCustomAttributes(typeof(FromQueryAttribute), true).Any() ||
-                            parameter.Source == BindingSource.Query ||
-                            parameter.Source == BindingSource.Path,
+                GeneratedType = Helpers.UtilsCore.ReplaceUnsupportedTypes(parameter.ParameterType),
+                IsQuery = parameter.BindingInfo.BindingSource == BindingSource.Query,
+                IsPath = parameter.BindingInfo.BindingSource == BindingSource.Path,
+                IsBody = parameter.BindingInfo.BindingSource == BindingSource.Body,
             };
     }
 }

@@ -14,6 +14,7 @@ namespace NetTypeS
             NameResolver = new ElementNameResolver(collector, customNamesHolder, settings);
             TypeInfo = new TypeInfo(collector);
             AllPropertiesAreOptional = settings.AllPropertiesAreOptional;
+            OptionalPropertiesStyle = settings.OptionalPropertiesStyle;
         }
 
         public IScriptBuilder Builder { get; }
@@ -29,5 +30,7 @@ namespace NetTypeS
         public ITypeElementBuilder TypeElementBuilder { get; }
 
         public bool AllPropertiesAreOptional { get; }
+
+        public OptionalPropertiesStyle OptionalPropertiesStyle { get; }
     }
 }

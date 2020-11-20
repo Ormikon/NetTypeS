@@ -24,7 +24,8 @@ namespace NetTypeS.WebApi.Framework.Extensions
             {
                 GeneratedName = Utils.StringUtils.ToCamelCase(parameter.Name),
                 GeneratedType = Helpers.Utils.ReplaceUnsupportedTypes(parameter.ParameterDescriptor.ParameterType),
-                IsQuery = parameter.Source == ApiParameterSource.FromUri
+                IsQuery = parameter.Source == ApiParameterSource.FromUri,
+                IsBody = parameter.Source == ApiParameterSource.FromBody,
             };
     }
 }

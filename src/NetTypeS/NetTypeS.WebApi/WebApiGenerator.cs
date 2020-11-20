@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NetTypeS.Elements.Primitives;
+using NetTypeS.Interfaces;
 using NetTypeS.Utils;
 using NetTypeS.WebApi.Helpers;
 using NetTypeS.WebApi.Models;
@@ -12,18 +13,29 @@ namespace NetTypeS.WebApi
     {
         private readonly string _promiseType;
         private readonly string _apiModuleName;
+        private readonly GeneratorSettings _settings;
 
-        public WebApiGenerator(string promiseType = "Promise", string apiModuleName = "apiDefinition"
+        public WebApiGenerator(string promiseType = "Promise", string apiModuleName = "apiDefinition", Action<GeneratorSettings> setupSettings = null
         )
         {
             _promiseType = promiseType;
             _apiModuleName = apiModuleName;
+
+            _settings = new GeneratorSettings
+            {
+                IncludeInheritedTypes = true,
+                GenerateNumberTypeForDictionaryKeys = true,
+            };
+
+            setupSettings?.Invoke(_settings);
         }
+
+        public IGeneratorSettings Settings => _settings;
 
         public GeneratedFiles GenerateAll(IEnumerable<EndpointInfo> controllers, IEnumerable<Type> additionalTypes)
         {
-            var types = Generator.New(new GeneratorSettings { IncludeInheritedTypes = true, GenerateNumberTypeForDictionaryKeys = true });
-            
+            var types = Generator.New(_settings);
+
             types.Module("models", m =>
             {
                 m.Include(controllers.Select(x => x.ResponseType));
@@ -64,7 +76,7 @@ namespace NetTypeS.WebApi
                         .SelectMany(RenameOverloads);
 
                     controllerEndpoints
-                        .Select(m => FunctionHelper.GenerateFunction(m, _promiseType))
+                        .Select(m => FunctionHelper.GenerateFunction(m, _promiseType, apiBuilder.Generator.Settings.QueryParametersAsObject))
                         .ForEach((m, n) =>
                         {
                             if (n > 0)

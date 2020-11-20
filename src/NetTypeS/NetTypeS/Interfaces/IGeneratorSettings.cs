@@ -55,6 +55,11 @@ namespace NetTypeS.Interfaces
         bool AllPropertiesAreOptional { get; }
 
         /// <summary>
+        /// Gets if all optional propertiest should be generated as nullable or as optional (with undefined)
+        /// </summary>
+        OptionalPropertiesStyle OptionalPropertiesStyle { get; }
+
+        /// <summary>
         /// Collection of assemblies to look for inherited types.
         /// </summary>
         IReadOnlyCollection<Assembly> InheritedTypeAssemblies { get; }
@@ -69,5 +74,9 @@ namespace NetTypeS.Interfaces
         /// </summary>
         bool GenerateNumberTypeForDictionaryKeys { get; }
 
+        /// <summary>
+        /// Gets if add GET query parameters as one object insted of using string parameters
+        /// </summary>
+        bool QueryParametersAsObject { get; }
     }
 }

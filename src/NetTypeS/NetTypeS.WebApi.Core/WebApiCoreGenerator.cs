@@ -17,23 +17,29 @@ namespace NetTypeS.WebApi.Core
         private readonly string _promiseType;
         private readonly string _apiModuleName;
         private readonly Func<ApiDescription, bool> _apiFilter;
+        private readonly Action<GeneratorSettings> _setupSettings;
 
         public WebApiCoreGenerator(
             string promiseType = "Promise",
             string apiModuleName = "apiDefinition",
-            Func<ApiDescription, bool> apiFilter = null
+            Func<ApiDescription, bool> apiFilter = null,
+            Action<GeneratorSettings> setupSettings = null
         )
         {
             _promiseType = promiseType;
             _apiModuleName = apiModuleName;
             _apiFilter = apiFilter;
+            _setupSettings = setupSettings;
         }
 
         public GeneratedFiles GenerateAll(IApiDescriptionGroupCollectionProvider explorer, IEnumerable<Type> additionalTypes = null)
         {
-            UpdateRelativePath(explorer);
+            var webApiGenerator = new WebApiGenerator(_promiseType, _apiModuleName, _setupSettings);
 
-            var webApiGenerator = new WebApiGenerator(_promiseType, _apiModuleName);
+            if (!webApiGenerator.Settings.QueryParametersAsObject)
+            {
+                UpdateRelativePath(explorer);
+            }
 
             var apiDescriptions = explorer.ApiDescriptionGroups.Items.SelectMany(x => x.Items)
                 .Where(api => !(api.ActionDescriptor is ControllerActionDescriptor actionDecriptor &&

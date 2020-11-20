@@ -80,7 +80,7 @@ namespace NetTypeS.Utils
 
         public static bool IsSimple(this Type type)
         {
-            if (typeof(object) == type || typeof(string) == type || typeof(void) == type)
+            if (typeof(object) == type || typeof(string) == type || typeof(void) == type || typeof(Guid) == type)
                 return true;
             if (type.IsValueType)
             {

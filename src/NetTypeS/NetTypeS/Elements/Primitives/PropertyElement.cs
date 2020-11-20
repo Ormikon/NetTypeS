@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using NetTypeS.Interfaces;
 
 namespace NetTypeS.Elements.Primitives
@@ -84,6 +86,8 @@ namespace NetTypeS.Elements.Primitives
 
         public override void Generate(IGeneratorModuleContext context)
         {
+            var isRequired = PropertyIsRequired(context);
+
             if (_typeProperty != null)
             {
                 var pn = new PropertyNameElement(context.NameResolver.GetPropertyName(_typeProperty));
@@ -91,10 +95,12 @@ namespace NetTypeS.Elements.Primitives
                 pn.Generate(context);
                 if (_required != null)
                 {
-                    if (!_required.Value)
+                    if (!isRequired && OptionAsUnderfied(context))
+                    {
                         context.Builder.Append("?");
+                    }
                 }
-                else if (context.TypeInfo.IsNullable(_typeProperty.Type))
+                else if (!isRequired && OptionAsUnderfied(context))
                 {
                     context.Builder.Append("?");
                 }
@@ -104,13 +110,38 @@ namespace NetTypeS.Elements.Primitives
             else
             {
                 _propertyName.Generate(context);
-                if (_required != null && !_required.Value)
+                if (!isRequired && OptionAsUnderfied(context))
                 {
                     context.Builder.Append("?");
                 }
                 context.Builder.Append(": ");
                 _typeLink.Generate(context);
             }
+
+            if (!isRequired && OptionAsNullable(context))
+            {
+                context.Builder.Append(" | null");
+            }
         }
+
+        private bool PropertyIsRequired(IGeneratorModuleContext context)
+        {
+            if (_required != null && _required.Value)
+            {
+                return true;
+            }
+
+            if (_typeProperty != null)
+            {
+                return _typeProperty.GetCustomAttributes<RequiredAttribute>().Any() ||
+                         !context.TypeInfo.IsNullable(_typeProperty.Type);
+            }
+
+            return false;
+        }
+
+        private bool OptionAsUnderfied(IGeneratorModuleContext context) => context.OptionalPropertiesStyle == OptionalPropertiesStyle.AsOptional;
+
+        private bool OptionAsNullable(IGeneratorModuleContext context) => context.OptionalPropertiesStyle == OptionalPropertiesStyle.AsNullable;
     }
 }
