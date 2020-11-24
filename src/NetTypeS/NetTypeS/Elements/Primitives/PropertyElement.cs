@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using NetTypeS.Attributes;
 using NetTypeS.Interfaces;
 
 namespace NetTypeS.Elements.Primitives
@@ -91,7 +92,6 @@ namespace NetTypeS.Elements.Primitives
             if (_typeProperty != null)
             {
                 var pn = new PropertyNameElement(context.NameResolver.GetPropertyName(_typeProperty));
-                var tl = new TypeLinkElement(_typeProperty.Type);
                 pn.Generate(context);
                 if (_required != null)
                 {
@@ -105,7 +105,20 @@ namespace NetTypeS.Elements.Primitives
                     context.Builder.Append("?");
                 }
                 context.Builder.Append(": ");
-                tl.Generate(context);
+
+                var preDefineType = _typeProperty.GetCustomAttributes<TypescriptGenerationTypeAttribute>().FirstOrDefault()?.GeneratedType;
+
+                if (string.IsNullOrEmpty(preDefineType))
+                {
+                    var tl = new TypeLinkElement(_typeProperty.Type);
+                    tl.Generate(context);
+                }
+                else
+                {
+                    var tn = new TypeNameElement(preDefineType);
+                    tn.Generate(context);
+                }
+                
             }
             else
             {
