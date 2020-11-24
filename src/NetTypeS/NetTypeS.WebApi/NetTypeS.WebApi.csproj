@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.3.0</Version>
+    <Version>2.3.1</Version>
     <Authors>Ormikon</Authors>
     <Copyright>Copyright Ormikon 2014</Copyright>
     <PackageLicenseUrl>https://github.com/Ormikon/NetTypeS/blob/master/LICENSE</PackageLicenseUrl>
