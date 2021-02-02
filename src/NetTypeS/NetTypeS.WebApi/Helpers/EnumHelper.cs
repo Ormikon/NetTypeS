@@ -19,16 +19,13 @@ namespace NetTypeS.WebApi.Helpers
                     .AddText("Names = ")
                     .AddBlock(et.Values.Select((ev, i) =>
                         Element.New()
-                            .AddText("\"")
                             .AddText(ev.ValueAsInt64().ToString(CultureInfo.InvariantCulture))
-                            .AddText("\"")
-                            .AddText(": \"")
+                            .AddText(": '")
                             .AddText(
                                 ev.CustomAttributes.OfType<DisplayAttribute>().Select(a => a.Name).SingleOrDefault()
                                 ?? PascalCaseToWords(ev.Name)
                             )
-                            .AddText("\"")
-                            .AddIf(() => i != et.Values.Count - 1, e => e.AddText(","))))
+                            .AddText("',")))
                     .AddText(";")
                     .AddLine()
             );

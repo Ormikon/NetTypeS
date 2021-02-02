@@ -53,10 +53,7 @@ namespace NetTypeS.Elements
             var va = values.ToArray();
             for (int i = 0; i < va.Length; i++)
             {
-                if (i != va.Length - 1)
-                    yield return new FixedElement(va[i], new TextElement(","));
-                else
-                    yield return va[i];
+                yield return new FixedElement(va[i], new TextElement(","));
             }
         }
 

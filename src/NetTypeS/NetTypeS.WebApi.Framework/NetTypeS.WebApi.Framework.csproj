@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.3.1</Version>
+    <Version>2.3.2</Version>
     <PackageId>Ormikon.NetTypeS.WebApi.Framework</PackageId>
     <Authors>Ormikon</Authors>
     <Company>OrmikonOrmikon</Company>
