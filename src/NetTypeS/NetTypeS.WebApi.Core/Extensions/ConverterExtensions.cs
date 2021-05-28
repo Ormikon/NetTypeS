@@ -34,7 +34,7 @@ namespace NetTypeS.WebApi.Core.Extensions
                 GeneratedType = Helpers.UtilsCore.ReplaceUnsupportedTypes(parameter.ParameterType),
                 IsQuery = parameter.BindingInfo.BindingSource == BindingSource.Query,
                 IsPath = parameter.BindingInfo.BindingSource == BindingSource.Path,
-                IsBody = parameter.BindingInfo.BindingSource == BindingSource.Body,
+                IsBody = (parameter.BindingInfo.BindingSource == BindingSource.Body || parameter.BindingInfo.BindingSource == BindingSource.Form),
             };
     }
 }
